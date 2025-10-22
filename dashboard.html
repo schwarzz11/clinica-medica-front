@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Clínica Médica</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+
+    <div class="dashboard-layout">
+        
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="assets/clinica-logo.jpg" alt="Logo Clínica Médica" class="logo-img">
+            </div>
+            <nav class="sidebar-nav">
+                <ul id="sidebarMenu">
+                    </ul>
+            </nav>
+            <div class="sidebar-footer">
+                 <button id="logoutButton" class="btn btn-logout">
+                    <i class="fas fa-sign-out-alt"></i> Sair
+                 </button>
+            </div>
+        </aside>
+
+        <div class="main-panel">
+            
+            <header class="main-header">
+                 <div class="header-content">
+                    <h1 id="pageTitle">Painel de Controle</h1> 
+                    <div class="user-info">
+                        <span id="userName">Carregando...</span>
+                    </div>
+                </div>
+            </header>
+
+            <main class="content-area" id="mainContent">
+                
+                <div class="card welcome-card">
+                    <h2>Bem-vindo(a), <span id="welcomeUserName">Usuário</span>!</h2>
+                    <p>Utilize o menu lateral para acessar as funcionalidades disponíveis para o seu perfil.</p>
+                </div>
+
+                <div id="admin-summary" class="user-summary" style="display: none;">
+                    <h3>Resumo Geral (Admin)</h3>
+                    <div class="summary-grid">
+                        <div class="card summary-card">
+                            <i class="fas fa-users summary-icon blue"></i>
+                            <div class="summary-text">
+                                <h3>Total de Pacientes</h3>
+                                <p>152</p> 
+                            </div>
+                        </div>
+                        <div class="card summary-card">
+                             <i class="fas fa-user-tie summary-icon green"></i>
+                             <div class="summary-text">
+                                <h3>Funcionários Ativos</h3>
+                                <p>25</p>
+                             </div>
+                        </div>
+                        <div class="card summary-card">
+                             <i class="fas fa-calendar-alt summary-icon purple"></i>
+                             <div class="summary-text">
+                                 <h3>Consultas Agendadas (Hoje)</h3>
+                                 <p>18</p>
+                             </div>
+                        </div>
+                    </div>
+                     <div class="card">
+                        <h4>Ações Rápidas (Admin)</h4>
+                        <div class="actions-wrapper"> 
+                            <a href="funcionarios.html" class="btn btn-quick-action">Gerenciar Funcionários</a>
+                            <a href="perfis.html" class="btn btn-quick-action">Gerenciar Perfis</a>
+                            <a href="relatorios.html" class="btn btn-quick-action">Ver Relatórios</a>
+                            <a href="configuracoes.html" class="btn btn-quick-action">Configurações</a>
+                        </div>
+                     </div>
+                </div>
+
+                <div id="medico-summary" class="user-summary" style="display: none;">
+                    <h3>Painel do Médico</h3>
+                     <div class="summary-grid">
+                        <div class="card summary-card">
+                            <i class="fas fa-calendar-day summary-icon blue"></i>
+                            <div class="summary-text">
+                                <h3>Suas Consultas (Hoje)</h3>
+                                <p>6</p> 
+                            </div>
+                        </div>
+                        <div class="card summary-card">
+                             <i class="fas fa-file-medical summary-icon green"></i>
+                             <div class="summary-text">
+                                <h3>Prontuários Pendentes</h3>
+                                <p>3</p>
+                             </div>
+                        </div>
+                         <div class="card summary-card">
+                             <i class="fas fa-chart-line summary-icon purple"></i>
+                             <div class="summary-text">
+                                 <h3>Relatórios Disponíveis</h3>
+                                 <p>2</p> </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h4>Ações Rápidas (Médico)</h4>
+                         <div class="actions-wrapper">
+                            <a href="consultas.html" class="btn btn-quick-action">Ver Minha Agenda</a>
+                            <a href="prontuarios.html" class="btn btn-quick-action">Acessar Prontuários</a>
+                            <a href="relatorios.html" class="btn btn-quick-action">Visualizar Relatórios</a>
+                            <a href="perfil_usuario.html" class="btn btn-quick-action">Editar Meu Perfil</a>
+                        </div>
+                     </div>
+                </div>
+
+                <div id="atendente-summary" class="user-summary" style="display: none;">
+                     <h3>Painel do Atendente</h3>
+                     <div class="summary-grid">
+                        <div class="card summary-card">
+                            <i class="fas fa-calendar-plus summary-icon blue"></i>
+                            <div class="summary-text">
+                                <h3>Agendamentos (Hoje)</h3>
+                                <p>18</p> 
+                            </div>
+                        </div>
+                        <div class="card summary-card">
+                             <i class="fas fa-user-plus summary-icon green"></i>
+                             <div class="summary-text">
+                                <h3>Novos Pacientes (Hoje)</h3>
+                                <p>4</p>
+                             </div>
+                        </div>
+                        <div class="card summary-card">
+                             <i class="fas fa-chart-pie summary-icon purple"></i> <div class="summary-text">
+                                 <h3>Relatórios de Atendimento</h3>
+                                 <p>Ver</p> </div>
+                        </div>
+                    </div>
+                     <div class="card">
+                        <h4>Ações Rápidas (Atendente)</h4>
+                         <div class="actions-wrapper">
+                            <a href="pacientes.html" class="btn btn-quick-action">Cadastrar Paciente</a>
+                            <a href="consultas.html" class="btn btn-quick-action">Agendar Consulta</a>
+                            <a href="relatorios.html" class="btn btn-quick-action">Emitir Relatórios</a>
+                            <a href="perfil_usuario.html" class="btn btn-quick-action">Editar Meu Perfil</a>
+                        </div>
+                     </div>
+                </div>
+
+            </main>
+
+        </div>
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="js/dashboard.js"></script>
+
+</body>
+</html>
