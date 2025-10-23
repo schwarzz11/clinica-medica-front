@@ -1,14 +1,13 @@
 /* * ARQUIVO: js/dashboard.js
- * Lógica SIMULADA (v5.9 - Preenche Dados e Foto no Perfil)
+ * Lógica SIMULADA (v5.7 - Links por Perfil CORRIGIDO + Médico vê Pacientes)
  */
 
 $(document).ready(function() {
-    console.log("Dashboard JS (v5.9) iniciado.");
+    console.log("Dashboard JS (v5.7 - Medico ve Pacientes) iniciado.");
 
     // --- 1. VERIFICAÇÃO DE LOGIN SIMULADO ---
     const userType = localStorage.getItem('userType');
     const userName = localStorage.getItem('userName');
-    const userEmail = userType ? `${userType}@clinica.com` : 'usuario@clinica.com';
 
     if (!userType) {
         console.warn('Tipo de usuário não encontrado. Redirecionando para login...');
@@ -17,7 +16,7 @@ $(document).ready(function() {
         }
         return;
     }
-    console.log("Usuário logado:", userType, "-", userName, "-", userEmail);
+    console.log("Usuário logado:", userType, "-", userName);
 
     // --- 2. EXIBIR INFORMAÇÕES DO USUÁRIO ---
     const $userNameSpan = $('#userName');
@@ -30,6 +29,7 @@ $(document).ready(function() {
         displayName = userType.charAt(0).toUpperCase() + userType.slice(1);
     }
     if($userNameSpan.length) $userNameSpan.text(`Olá, ${displayName}`);
+    // Verifica se existe o span de boas-vindas antes de usá-lo (só existe no dashboard.html)
     if($welcomeUserNameSpan.length) $welcomeUserNameSpan.text(displayName);
 
     // --- 3. CONSTRUÇÃO DINÂMAICA DO MENU LATERAL (SIDEBAR - Links por Perfil) ---
@@ -41,9 +41,10 @@ $(document).ready(function() {
     $sidebarMenu.empty();
     console.log("Construindo menu APENAS com links permitidos para:", userType);
 
+    // Definição dos itens de menu ATUALIZADA (Médico Vê Pacientes)
     const menuItems = {
         'Painel Principal': { page: 'dashboard.html', icon: 'fas fa-home', allowed: ['admin', 'medico', 'atendente'] },
-        'Pacientes': { page: 'pacientes.html', icon: 'fas fa-users', allowed: ['admin', 'atendente'] },
+        'Pacientes': { page: 'pacientes.html', icon: 'fas fa-users', allowed: ['admin', 'atendente', 'medico'] }, // <<< ADICIONADO 'medico'
         'Consultas': { page: 'consultas.html', icon: 'fas fa-calendar-alt', allowed: ['admin', 'medico', 'atendente'] },
         'Prontuários': { page: 'prontuarios.html', icon: 'fas fa-file-medical', allowed: ['admin', 'medico'] },
         'Funcionários': { page: 'funcionarios.html', icon: 'fas fa-user-tie', allowed: ['admin'] },
@@ -69,6 +70,8 @@ $(document).ready(function() {
                     </li>
                 `);
                 itemsAdded++;
+            } else {
+                 console.warn(`Item de menu '${text}' permitido, mas não tem uma página definida.`);
             }
         }
     });
@@ -77,65 +80,57 @@ $(document).ready(function() {
          $sidebarMenu.append('<li><span style="padding: 15px 25px; color: #aaa;">Nenhuma opção disponível</span></li>');
     }
 
-    // Marcar link ativo
+    // Marcar link ativo (baseado na URL atual)
     const currentPage = window.location.pathname.split('/').pop() || 'dashboard.html';
     const $activeLink = $sidebarMenu.find(`a[href$="${currentPage}"]`);
     if ($activeLink.length > 0) {
         $activeLink.addClass('active');
+        console.log("Link ativo marcado:", currentPage);
     } else {
+        console.warn("Nenhum link ativo encontrado para a página atual:", currentPage);
          const $dashboardLink = $sidebarMenu.find(`a[href$="dashboard.html"]`);
-         if ($dashboardLink.length > 0) $dashboardLink.addClass('active');
+         if ($dashboardLink.length > 0) {
+             $dashboardLink.addClass('active');
+             console.log("Marcando 'Painel Principal' como ativo (fallback).");
+         }
     }
 
-    // --- 4. MOSTRAR CONTEÚDO ESTÁTICO / PREENCHER DADOS ---
-    console.log("Página atual:", currentPage, "User:", userType);
+    // --- 4. MOSTRAR CONTEÚDO ESTÁTICO RELEVANTE / PREENCHER DADOS ---
+    console.log("Tentando mostrar/preencher conteúdo estático para:", userType, "na página:", currentPage);
 
+    // Esconde todas as seções dinâmicas primeiro
     $('.user-summary').hide();
     $('.user-reports').hide();
 
-    // DASHBOARD.HTML
+    // Lógica para DASHBOARD.HTML
     if (currentPage === 'dashboard.html') {
         const $targetSummary = $(`#${userType}-summary`);
         if ($targetSummary.length > 0) $targetSummary.show();
         else console.warn(`#${userType}-summary não encontrado.`);
     }
-    // RELATORIOS.HTML
+    // Lógica para RELATORIOS.HTML
     else if (currentPage === 'relatorios.html') {
         const $targetReports = $(`#${userType}-relatorios`);
         if ($targetReports.length > 0) $targetReports.show();
          else console.warn(`#${userType}-relatorios não encontrado.`);
     }
-    // PERFIL_USUARIO.HTML
+    // Lógica para PERFIL_USUARIO.HTML
     else if (currentPage === 'perfil_usuario.html') {
-        console.log("Preenchendo dados do perfil...");
-        // Preenche campos do formulário
+        const userEmail = userType ? `${userType}@clinica.com` : 'usuario@clinica.com';
         $('#profileName').val(displayName);
         $('#profileEmail').val(userEmail);
         $('#profileRole').val(userType.charAt(0).toUpperCase() + userType.slice(1));
-
-        // Simula telefone
         let phoneExample = '';
         if(userType === 'admin') phoneExample = '(34) 99999-1111';
         else if(userType === 'medico') phoneExample = '(34) 98888-2222';
         else if(userType === 'atendente') phoneExample = '(34) 97777-3333';
         $('#profilePhone').val(phoneExample);
-
-        // Mostra a imagem correta e esconde o ícone
-        const $profilePicElement = $(`#profilePicture-${userType}`); // Seleciona a <img> correta
+        const $profilePicElement = $(`#profilePicture-${userType}`);
         const $profileIcon = $('#profilePictureIcon');
-
         if ($profilePicElement.length) {
-            // Verifica se a imagem existe/carregou (tratamento básico de erro)
-            $profilePicElement.on('error', function() {
-                 console.warn(`Imagem ${$profilePicElement.attr('src')} não encontrada. Mostrando ícone.`);
-                 if ($profileIcon.length) $profileIcon.show(); // Mostra ícone se img falhar
-            }).show(); // Tenta mostrar a imagem
-            if ($profileIcon.length) $profileIcon.hide(); // Esconde o ícone por padrão
-            console.log(`Tentando exibir ${$profilePicElement.attr('src')}`);
-        } else {
-             console.warn(`Elemento img para '${userType}' não encontrado. Mostrando ícone.`);
-             if ($profileIcon.length) $profileIcon.show(); // Mostra ícone se img não existe
-        }
+            $profilePicElement.on('error', function() { if ($profileIcon.length) $profileIcon.show(); }).show();
+            if ($profileIcon.length) $profileIcon.hide();
+        } else { if ($profileIcon.length) $profileIcon.show(); }
     }
 
 
@@ -147,9 +142,7 @@ $(document).ready(function() {
             localStorage.removeItem('userName');
             window.location.href = 'index.html';
         });
-    } else {
-         console.error("ERRO: Botão #logoutButton não encontrado.");
-    }
+    } else { console.error("ERRO: Botão #logoutButton não encontrado."); }
 
     // --- 6. Lógica para Menu Hamburger ---
      if ($('#hamburgerButton').length === 0) {
