@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Perfil - Clínica Médica</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+
+    <div class="dashboard-layout">
+
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="assets/clinica-logo.jpg" alt="Logo Clínica Médica" class="logo-img">
+            </div>
+            <nav class="sidebar-nav">
+                <ul id="sidebarMenu">
+                    </ul>
+            </nav>
+            <div class="sidebar-footer">
+                 <button id="logoutButton" class="btn btn-logout">
+                    <i class="fas fa-sign-out-alt"></i> Sair
+                 </button>
+            </div>
+        </aside>
+
+        <div class="main-panel">
+
+            <header class="main-header">
+                 <div class="header-content">
+                    <h1 id="pageTitle">Meu Perfil</h1>
+                    <div class="user-info">
+                        <span id="userName">Carregando...</span>
+                    </div>
+                </div>
+            </header>
+
+            <main class="content-area" id="mainContent">
+
+                <div class="card profile-card"> <h2>Editar Informações do Perfil</h2>
+                    <p>Mantenha seus dados atualizados.</p>
+
+                    <div class="profile-picture-section">
+                        <h4>Foto do Perfil</h4>
+                        <div class="picture-placeholder" id="profilePicturePlaceholder">
+                            <img id="profilePicture-admin" src="assets/avatar-admin.jpg" alt="Foto Admin" style="display: none;">
+                            <img id="profilePicture-medico" src="assets/avatar-medico.jpg" alt="Foto Médico" style="display: none;">
+                            <img id="profilePicture-atendente" src="assets/avatar-atendente.jpg" alt="Foto Atendente" style="display: none;">
+                            <i id="profilePictureIcon" class="fas fa-user-circle"></i>
+                        </div>
+                        <button class="btn btn-secondary btn-upload">Alterar Foto</button>
+                        <small>Use uma foto quadrada (JPG ou PNG).</small>
+                    </div>
+
+                    <form id="profileForm" class="profile-form">
+
+                        <div class="form-section">
+                            <h4>Dados Pessoais</h4>
+                            <div class="form-group">
+                                <label for="profileName">Nome Completo</label>
+                                <input type="text" id="profileName" name="profileName" value="" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="profileEmail">Email (Login)</label>
+                                <input type="email" id="profileEmail" name="profileEmail" value="" disabled readonly>
+                                <small>Seu email de login não pode ser alterado.</small>
+                            </div>
+                            <div class="form-group">
+                                <label for="profilePhone">Telefone</label>
+                                <input type="tel" id="profilePhone" name="profilePhone" placeholder="(XX) XXXXX-XXXX" value="">
+                            </div>
+                            <div class="form-group">
+                                <label for="profileRole">Perfil</label>
+                                <input type="text" id="profileRole" name="profileRole" value="" disabled readonly>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                            <h4>Alterar Senha (Opcional)</h4>
+                            <p>Preencha apenas se desejar definir uma nova senha.</p>
+                             <div class="form-group">
+                                <label for="currentPassword">Senha Atual</label>
+                                <input type="password" id="currentPassword" name="currentPassword" placeholder="Digite sua senha atual">
+                            </div>
+                            <div class="form-row password-row"> <div class="form-group">
+                                    <label for="newPassword">Nova Senha</label>
+                                    <input type="password" id="newPassword" name="newPassword" placeholder="Mínimo 6 caracteres">
+                                </div>
+                                <div class="form-group">
+                                    <label for="confirmPassword">Confirmar Nova Senha</label>
+                                    <input type="password" id="confirmPassword" name="confirmPassword" placeholder="Repita a nova senha">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary btn-submit">Salvar Alterações</button>
+                        </div>
+
+                    </form>
+
+                </div> </main>
+            </div>
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="js/dashboard.js"></script>
+
+    <style>
+        .profile-card {
+            max-width: 800px; /* Limita largura do card */
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .profile-picture-section {
+            text-align: center;
+            margin-bottom: 2.5rem; /* Espaço abaixo da seção da foto */
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+         .profile-picture-section h4 {
+             font-size: 1.1rem;
+             font-weight: 600;
+             color: var(--dark-blue);
+             margin-bottom: 1.5rem;
+             text-align: center; /* Centraliza título */
+         }
+
+        .picture-placeholder {
+            width: 150px; /* Tamanho ajustado */
+            height: 150px;
+            background-color: #e9ecef;
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            display: flex; /* Usar flex para centralizar ícone/img */
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1.5rem auto;
+            overflow: hidden;
+            position: relative;
+        }
+        .picture-placeholder i {
+            font-size: 5rem; /* Ícone ajustado */
+            color: #ced4da;
+            position: absolute;
+             z-index: 1;
+        }
+         .picture-placeholder img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 50%;
+            position: relative;
+            z-index: 2;
+             display: none; /* Escondido por padrão, JS mostra a correta */
+         }
+
+        .btn-upload {
+            max-width: 200px; /* Largura máxima */
+            margin: 0 auto 0.5rem auto; /* Centraliza */
+            background-color: var(--white);
+            color: var(--text-light);
+            border: 1px solid var(--border-color);
+             box-shadow: none;
+             padding: 8px 15px;
+             font-size: 0.9rem;
+             display: block; /* Garante centralização com margin auto */
+        }
+         .btn-upload:hover {
+            background-color: var(--bg-light-gray);
+            border-color: #adb5bd;
+             box-shadow: none;
+             transform: none;
+         }
+
+         .profile-picture-section small {
+             font-size: 0.8rem;
+             color: var(--text-light);
+             display: block;
+             margin-top: 0.5rem;
+         }
+
+        .profile-form {
+             margin-top: 2rem; /* Espaço acima do formulário */
+        }
+
+        .form-section {
+            margin-bottom: 2.5rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .form-section:last-of-type {
+            border-bottom: none;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+        }
+        .form-section h4 {
+            font-size: 1.15rem;
+            font-weight: 600;
+            color: var(--dark-blue);
+            margin-bottom: 1.8rem;
+        }
+        .form-section p {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 1.8rem;
+        }
+
+        /* Layout dos campos de formulário */
+        .form-group {
+             margin-bottom: 1.5rem; /* Espaço entre os campos */
+        }
+
+         /* Linha de senha lado a lado em telas maiores */
+         .password-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+         }
+
+        .form-group label {
+             font-size: 0.85rem;
+             font-weight: 500;
+             color: var(--text-dark);
+             margin-bottom: 8px;
+             display: block; /* Garante que label fique acima */
+        }
+         .form-group input {
+             padding: 14px;
+             border-radius: 8px;
+             width: 100%; /* Ocupa toda a largura disponível */
+             border: 1px solid var(--border-color);
+             font-family: 'Montserrat', sans-serif;
+             font-size: 0.95rem; /* Fonte um pouco menor */
+         }
+         .form-group input:focus {
+             outline: none;
+             border-color: var(--primary-blue);
+             box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.2);
+         }
+         .form-group input:disabled,
+         .form-group input[readonly] {
+             background-color: #e9ecef;
+             cursor: not-allowed;
+             border-color: #ced4da;
+             color: #6c757d; /* Texto mais apagado */
+         }
+
+
+        .form-group small {
+            display: block;
+            margin-top: 8px;
+            font-size: 0.8rem;
+            color: var(--text-light);
+        }
+        .form-actions {
+            margin-top: 2.5rem;
+            text-align: right;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        .profile-form .btn-submit {
+             width: auto;
+             padding: 12px 30px;
+             background: var(--gradient-primary);
+        }
+         .profile-form .btn-submit:hover {
+             box-shadow: var(--shadow-hover);
+         }
+
+        /* Responsividade */
+         @media (max-width: 768px) {
+            .profile-card {
+                 padding: 25px;
+            }
+             .profile-picture-section {
+                 padding-right: 0;
+                 border-right: none;
+                 padding-bottom: 1.5rem;
+                 margin-bottom: 1.5rem;
+             }
+             .picture-placeholder {
+                 width: 120px; /* Menor no mobile */
+                 height: 120px;
+             }
+             .picture-placeholder i {
+                 font-size: 4rem;
+             }
+             .password-row {
+                grid-template-columns: 1fr; /* Senha uma embaixo da outra */
+                gap: 1rem;
+             }
+              .form-actions {
+                 text-align: center;
+             }
+              .profile-form .btn-submit {
+                 width: 100%; /* Botão ocupa largura total */
+             }
+         }
+
+    </style>
+
+</body>
+</html>

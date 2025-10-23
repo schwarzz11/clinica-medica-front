@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relatórios - Clínica Médica</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+
+    <div class="dashboard-layout">
+
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="assets/clinica-logo.jpg" alt="Logo Clínica Médica" class="logo-img">
+            </div>
+            <nav class="sidebar-nav">
+                <ul id="sidebarMenu">
+                    </ul>
+            </nav>
+            <div class="sidebar-footer">
+                 <button id="logoutButton" class="btn btn-logout">
+                    <i class="fas fa-sign-out-alt"></i> Sair
+                 </button>
+            </div>
+        </aside>
+
+        <div class="main-panel">
+
+            <header class="main-header">
+                 <div class="header-content">
+                    <h1 id="pageTitle">Relatórios</h1>
+                    <div class="user-info">
+                        <span id="userName">Carregando...</span>
+                    </div>
+                </div>
+            </header>
+
+            <main class="content-area" id="mainContent">
+
+                <div class="card">
+                     <h2>Relatórios Gerenciais</h2>
+                     <p>Visualize informações importantes sobre a operação da clínica.</p>
+                 </div>
+
+                 <div id="admin-relatorios" class="user-reports" style="display: none;">
+
+                    <div class="card">
+                        <h3><i class="fas fa-tachometer-alt blue"></i> Monitoramento do Sistema (Simulação Visual)</h3>
+                        <div class="chart-placeholder">
+                            <div class="chart-title">Uso de Recursos (%) - Última Hora</div>
+                            <div class="chart-area">
+                                <div class="y-axis">
+                                    <span>100</span>
+                                    <span>75</span>
+                                    <span>50</span>
+                                    <span>25</span>
+                                    <span>0</span>
+                                </div>
+                                <div class="bars">
+                                    <div class="bar-group">
+                                        <div class="bar" style="height: 60%; background-color: #28a745;" title="CPU: 60%"></div>
+                                        <span class="bar-label">CPU</span>
+                                    </div>
+                                    <div class="bar-group">
+                                        <div class="bar" style="height: 45%; background-color: #1A73E8;" title="Memória: 45%"></div>
+                                        <span class="bar-label">Memória</span>
+                                    </div>
+                                    <div class="bar-group">
+                                        <div class="bar" style="height: 30%; background-color: #ffc107;" title="Disco: 30%"></div>
+                                        <span class="bar-label">Disco</span>
+                                    </div>
+                                    <div class="bar-group">
+                                        <div class="bar" style="height: 75%; background-color: #dc3545;" title="Rede I/O: 75%"></div>
+                                        <span class="bar-label">Rede I/O</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <p style="margin-top: 1.5rem;"><strong>Status Geral:</strong> <span style="color: green; font-weight: bold;">Operacional</span></p>
+                        <p><strong>Consultas Processadas (última hora):</strong> 15</p>
+                        <p><strong>Erros Registrados:</strong> 2 (Baixa prioridade)</p>
+                         <div class="report-actions">
+                            <button class="btn btn-quick-action">Ver Logs</button>
+                            <button class="btn btn-quick-action">Abrir Painel Completo</button>
+                        </div>
+                    </div>
+
+
+                    <div class="card">
+                        <h3><i class="fas fa-chart-bar blue"></i> Relatório Financeiro Detalhado (Outubro 2025)</h3>
+                        <p><strong>Faturamento Total:</strong> R$ 85.340,00</p>
+                        <p><strong>Custo Operacional:</strong> R$ 42.100,00</p>
+                        <p><strong>Lucro Líquido:</strong> R$ 43.240,00</p>
+                        <p><strong>Pagamentos Pendentes:</strong> R$ 5.120,00 (3 faturas)</p>
+                        <div class="report-actions">
+                            <button class="btn btn-quick-action">Ver Detalhes Financeiros</button>
+                            <button class="btn btn-quick-action">Exportar Planilha</button>
+                        </div>
+                    </div>
+
+                     <div class="card">
+                        <h3><i class="fas fa-users green"></i> Relatório de Pacientes Ativos e Inativos</h3>
+                         <p><strong>Total de Pacientes:</strong> 152</p>
+                        <p><strong>Pacientes Ativos (últimos 6 meses):</strong> 128</p>
+                        <p><strong>Pacientes Inativos:</strong> 24</p>
+                        <p><strong>Novos Pacientes (Mês):</strong> 35</p>
+                         <div class="report-actions">
+                            <button class="btn btn-quick-action">Ver Lista Completa</button>
+                            <button class="btn btn-quick-action">Exportar Dados</button>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <h3><i class="fas fa-user-tie purple"></i> Relatório de Desempenho (Funcionários)</h3>
+                        <p><strong>Médico com mais consultas:</strong> Dr. João Silva (110)</p>
+                        <p><strong>Especialidade mais procurada:</strong> Cardiologia (180 consultas)</p>
+                        <p><strong>Atendente com mais agendamentos:</strong> Maria Oliveira (280)</p>
+                        <div class="report-actions">
+                             <button class="btn btn-quick-action">Ver Desempenho Individual</button>
+                        </div>
+                    </div>
+
+                 </div>
+                 <div id="medico-relatorios" class="user-reports" style="display: none;">
+
+                    <div class="card">
+                        <h3><i class="fas fa-calendar-check blue"></i> Seu Relatório de Atividade (Outubro 2025)</h3>
+                        <p><strong>Consultas Realizadas por você:</strong> 110</p>
+                        <p><strong>Tempo Médio por Consulta:</strong> 25 minutos</p>
+                        <p><strong>Pacientes Atendidos (Únicos):</strong> 85</p>
+                        <p><strong>Próximas Consultas (Hoje):</strong> 6</p>
+                        <div class="report-actions">
+                             <a href="consultas.html" class="btn btn-quick-action">Ver Minha Agenda Detalhada</a>
+                        </div>
+                    </div>
+
+                     <div class="card">
+                        <h3><i class="fas fa-file-medical green"></i> Status dos Seus Prontuários</h3>
+                        <p><strong>Prontuários Atualizados (Últimos 7 dias):</strong> 22</p>
+                        <p><strong>Prontuários Pendentes de Fechamento:</strong> 3</p>
+                         <div class="report-actions">
+                             <a href="prontuarios.html" class="btn btn-quick-action">Acessar Prontuários Pendentes</a>
+                        </div>
+                    </div>
+
+                 </div>
+                 <div id="atendente-relatorios" class="user-reports" style="display: none;">
+
+                    <div class="card">
+                        <h3><i class="fas fa-calendar-plus blue"></i> Relatório de Agendamentos (Outubro 2025)</h3>
+                        <p><strong>Total de Agendamentos (Sistema):</strong> 450</p>
+                        <p><strong>Agendamentos Realizados por você:</strong> 280</p>
+                        <p><strong>Taxa de Confirmação Geral:</strong> 92%</p>
+                        <p><strong>Horários de Pico:</strong> 09:00 - 11:00</p>
+                         <div class="report-actions">
+                             <a href="consultas.html" class="btn btn-quick-action">Ver Agenda Completa</a>
+                        </div>
+                    </div>
+
+                     <div class="card">
+                        <h3><i class="fas fa-user-plus green"></i> Relatório de Cadastro de Pacientes</h3>
+                        <p><strong>Novos Pacientes Cadastrados por você (Mês):</strong> 28</p>
+                        <p><strong>Total de Pacientes Ativos:</strong> 152</p>
+                        <p><strong>Convênios mais Cadastrados:</strong> Unimed</p>
+                        <div class="report-actions">
+                             <a href="pacientes.html" class="btn btn-quick-action">Ver Lista de Pacientes</a>
+                        </div>
+                    </div>
+
+                 </div>
+                 </main>
+            </div>
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="js/dashboard.js"></script>
+
+    <style>
+        /* Estilos específicos para a página de relatórios */
+        .user-reports h3 {
+            display: flex;
+            align-items: center;
+            font-size: 1.25rem;
+            margin-bottom: 1.5rem;
+            color: var(--dark-blue);
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+         .user-reports h3 i {
+            margin-right: 12px;
+            color: var(--text-light);
+            width: 20px;
+            text-align: center;
+         }
+         .user-reports h3 i.blue { color: var(--primary-blue); }
+         .user-reports h3 i.green { color: #28a745; }
+         .user-reports h3 i.purple { color: #6f42c1; }
+
+         .user-reports p {
+            font-size: 1rem;
+            margin-bottom: 0.8rem;
+            color: var(--text-light);
+            line-height: 1.6;
+         }
+         .user-reports p strong {
+            color: var(--text-dark);
+            font-weight: 600;
+            margin-right: 5px;
+         }
+         .report-actions {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+         }
+
+         /* Estilos CORRIGIDOS para simular gráfico Grafana */
+        .chart-placeholder {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 20px;
+            background-color: #f8f9fa; /* Fundo cinza claro para o gráfico */
+            margin-bottom: 1.5rem;
+            position: relative; /* Para linhas de grade */
+        }
+        .chart-title {
+            text-align: center;
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 2rem; /* Mais espaço */
+            font-weight: 500;
+        }
+        .chart-area {
+            display: flex; /* Alterado para flex */
+            position: relative;
+            height: 180px; /* Altura da área do gráfico */
+             /* Linhas de grade (simuladas com gradiente) */
+             background-image: linear-gradient(to right, var(--border-color) 1px, transparent 1px), /* Linhas verticais (opcional) */
+                               linear-gradient(to bottom, var(--border-color) 1px, transparent 1px); /* Linhas horizontais */
+             background-size: 25% 25%; /* Espaçamento das linhas (ajuste %) */
+             border-left: 1px solid #adb5bd; /* Eixo Y */
+             border-bottom: 1px solid #adb5bd; /* Eixo X */
+             padding-left: 35px; /* Espaço para labels do eixo Y */
+             padding-bottom: 25px; /* Espaço para labels das barras */
+             align-items: flex-end; /* Alinha barras na base */
+             justify-content: space-around; /* Espaça as barras */
+        }
+        .y-axis {
+            position: absolute;
+            left: -5px;
+            top: 0;
+            /* Ajuste para alinhar com as linhas de grade (25% de altura) */
+            bottom: 25px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; /* Distribui os labels */
+            align-items: flex-end;
+            padding-right: 10px;
+            height: calc(100% - 25px); /* Altura do eixo Y */
+        }
+        .y-axis span {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            position: relative; /* Para ajuste fino */
+             /* Tenta alinhar com as linhas de grade (pode precisar de ajuste) */
+             /* bottom: -5px; */
+        }
+        /* Ajuste fino para os labels do eixo Y (pode variar com a fonte) */
+        .y-axis span:nth-child(1) { top: -5px; } /* 100 */
+        .y-axis span:nth-child(5) { bottom: -5px; } /* 0 */
+
+
+        .bars {
+             /* Removido - agora é parte do .chart-area */
+             display: contents; /* Faz com que os .bar-group se alinhem no flex do pai */
+        }
+        .bar-group {
+             width: 18%;
+             height: 100%; /* Ocupa altura da chart-area */
+             display: flex;
+             flex-direction: column;
+             align-items: center;
+             justify-content: flex-end; /* Barra cresce de baixo para cima */
+             position: relative; /* Para posicionar o label */
+        }
+        .bar {
+            width: 70%;
+            background-color: var(--primary-blue);
+            border-radius: 4px 4px 0 0;
+            transition: height 0.5s ease-out;
+            cursor: pointer;
+            position: relative;
+            margin: 0 auto; /* Centraliza a barra no grupo */
+        }
+         /* Tooltip */
+        .bar:hover::after {
+            content: attr(title);
+            position: absolute;
+            bottom: 105%;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.75); /* Mais escuro */
+            color: white;
+            padding: 4px 8px; /* Mais padding */
+            border-radius: 4px;
+            font-size: 0.75rem;
+            white-space: nowrap;
+            z-index: 10;
+         }
+
+        .bar-label {
+            position: absolute;
+            bottom: -20px;
+            font-size: 0.75rem;
+            color: var(--text-light);
+            white-space: nowrap;
+        }
+
+    </style>
+
+</body>
+</html>

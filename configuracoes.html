@@ -1,0 +1,351 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configurações - Clínica Médica</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+<body>
+
+    <div class="dashboard-layout">
+
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="assets/clinica-logo.jpg" alt="Logo Clínica Médica" class="logo-img">
+            </div>
+            <nav class="sidebar-nav">
+                <ul id="sidebarMenu">
+                    </ul>
+            </nav>
+            <div class="sidebar-footer">
+                 <button id="logoutButton" class="btn btn-logout">
+                    <i class="fas fa-sign-out-alt"></i> Sair
+                 </button>
+            </div>
+        </aside>
+
+        <div class="main-panel">
+
+            <header class="main-header">
+                 <div class="header-content">
+                    <h1 id="pageTitle">Configurações</h1>
+                    <div class="user-info">
+                        <span id="userName">Carregando...</span>
+                    </div>
+                </div>
+            </header>
+
+            <main class="content-area" id="mainContent">
+
+                <div class="card">
+                    <h2>Configurações do Sistema</h2>
+                    <p>Ajuste as preferências gerais, aparência e integrações da clínica.</p>
+
+                    <form id="settingsForm" class="settings-form">
+
+                        <div class="form-section">
+                            <h4><i class="fas fa-clinic-medical icon-title"></i> Informações da Clínica</h4>
+                            <div class="form-group">
+                                <label for="clinicName">Nome da Clínica</label>
+                                <input type="text" id="clinicName" name="clinicName" value="Clínica Médica Modelo">
+                            </div>
+                            <div class="form-group">
+                                <label for="clinicAddress">Endereço Principal</label>
+                                <input type="text" id="clinicAddress" name="clinicAddress" value="Rua das Flores, 100, Centro, Araguari-MG">
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="clinicPhone">Telefone Principal</label>
+                                    <input type="tel" id="clinicPhone" name="clinicPhone" value="(34) 3232-3232">
+                                </div>
+                                <div class="form-group">
+                                    <label for="clinicEmail">Email de Contato</label>
+                                    <input type="email" id="clinicEmail" name="clinicEmail" value="contato@clinicamedica.com">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="form-section">
+                             <h4><i class="fas fa-clock icon-title"></i> Horário de Funcionamento</h4>
+                             <div class="form-row">
+                                <div class="form-group">
+                                    <label for="startTime">Horário de Abertura (Seg-Sex)</label>
+                                    <input type="time" id="startTime" name="startTime" value="08:00">
+                                </div>
+                                <div class="form-group">
+                                    <label for="endTime">Horário de Fechamento (Seg-Sex)</label>
+                                    <input type="time" id="endTime" name="endTime" value="18:00">
+                                </div>
+                             </div>
+                             <div class="form-group checkbox-group">
+                                 <input type="checkbox" id="openSaturday" name="openSaturday">
+                                 <label for="openSaturday">Abrir aos Sábados (08:00 - 12:00)</label>
+                             </div>
+                        </div>
+
+
+                        <div class="form-section">
+                            <h4><i class="fas fa-bell icon-title"></i> Notificações</h4>
+                            <p>Defina como os usuários e pacientes serão notificados.</p>
+                             <div class="form-group checkbox-group">
+                                 <input type="checkbox" id="notifyNewAppointment" name="notifyNewAppointment" checked>
+                                 <label for="notifyNewAppointment">Notificar paciente sobre novo agendamento (Email)</label>
+                             </div>
+                             <div class="form-group checkbox-group">
+                                 <input type="checkbox" id="notifyAppointmentReminder" name="notifyAppointmentReminder">
+                                 <label for="notifyAppointmentReminder">Enviar lembrete de consulta 24h antes (SMS)</label>
+                             </div>
+                             <div class="form-group checkbox-group">
+                                 <input type="checkbox" id="notifyDoctorNewAppointment" name="notifyDoctorNewAppointment" checked>
+                                 <label for="notifyDoctorNewAppointment">Notificar médico sobre novo agendamento na agenda</label>
+                             </div>
+                             <div class="form-group">
+                                 <label for="reminderTime">Horário envio lembretes</label>
+                                 <select id="reminderTime" name="reminderTime">
+                                     <option value="09:00">09:00</option>
+                                     <option value="10:00" selected>10:00</option>
+                                     <option value="11:00">11:00</option>
+                                 </select>
+                             </div>
+                        </div>
+
+                        <div class="form-section">
+                             <h4><i class="fas fa-palette icon-title"></i> Aparência</h4>
+                             <div class="form-group">
+                                <label for="logoUpload">Logo da Clínica (Upload)</label>
+                                <input type="file" id="logoUpload" name="logoUpload" accept="image/png, image/jpeg">
+                                <small>Recomendado: Fundo transparente, máx 2MB.</small>
+                             </div>
+                              <div class="form-group">
+                                 <label for="primaryColor">Cor Primária (Tema)</label>
+                                 <input type="color" id="primaryColor" name="primaryColor" value="#1A73E8"> </div>
+                        </div>
+
+                         <div class="form-section">
+                            <h4><i class="fas fa-puzzle-piece icon-title"></i> Módulos Ativos</h4>
+                             <div class="form-group checkbox-group">
+                                 <input type="checkbox" id="moduleProntuario" name="moduleProntuario" checked disabled>
+                                 <label for="moduleProntuario">Módulo de Prontuários (Obrigatório)</label>
+                             </div>
+                              <div class="form-group checkbox-group">
+                                 <input type="checkbox" id="moduleFinanceiro" name="moduleFinanceiro">
+                                 <label for="moduleFinanceiro">Módulo Financeiro Simplificado</label>
+                             </div>
+                              <div class="form-group checkbox-group">
+                                 <input type="checkbox" id="moduleEstoque" name="moduleEstoque">
+                                 <label for="moduleEstoque">Módulo de Controle de Estoque</label>
+                             </div>
+                         </div>
+
+
+                         <div class="form-section">
+                            <h4><i class="fas fa-plug icon-title"></i> Integrações</h4>
+                            <p>Configure conexões com outros sistemas (fictício).</p>
+                             <div class="form-group">
+                                <label for="prontuarioEletronicoApi">API Prontuário Eletrônico Externo (URL)</label>
+                                <input type="text" id="prontuarioEletronicoApi" name="prontuarioEletronicoApi" placeholder="https://api.prontuario.com/v1" value="">
+                             </div>
+                             <div class="form-group checkbox-group">
+                                 <input type="checkbox" id="enableGatewayPagamento" name="enableGatewayPagamento">
+                                 <label for="enableGatewayPagamento">Habilitar Gateway de Pagamento Online</label>
+                             </div>
+                              <div class="form-group">
+                                <label for="apiKeyGateway">Chave API Gateway Pagamento</label>
+                                <input type="password" id="apiKeyGateway" name="apiKeyGateway" value="************">
+                             </div>
+                        </div>
+
+
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary btn-submit">Salvar Configurações</button>
+                        </div>
+
+                    </form>
+                </div> </main>
+            </div>
+
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="js/dashboard.js"></script>
+
+    <style>
+        .settings-form {
+            margin-top: 2rem;
+        }
+        .form-section {
+            margin-bottom: 2.5rem;
+            padding-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+        }
+        .form-section:last-of-type {
+            border-bottom: none;
+            margin-bottom: 1rem;
+            padding-bottom: 1rem;
+        }
+        /* Título da Seção */
+        .form-section h4 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--dark-blue);
+            margin-bottom: 1.8rem;
+            display: flex;
+            align-items: center;
+        }
+        .form-section h4 .icon-title {
+            margin-right: 12px; /* Aumenta espaço do ícone */
+            color: var(--primary-blue);
+            font-size: 1.1em;
+            width: 25px; /* Alinha ícones */
+            text-align: center;
+        }
+
+        .form-section p {
+            font-size: 0.9rem;
+            color: var(--text-light);
+            margin-bottom: 1.8rem;
+            margin-top: -1rem;
+        }
+        /* Layout de Colunas */
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+         /* Estilos para campos de formulário */
+        .form-group {
+            margin-bottom: 1.5rem; /* Espaço padrão */
+        }
+        .form-group label {
+             font-size: 0.85rem;
+             font-weight: 500;
+             color: var(--text-dark);
+             margin-bottom: 8px;
+             display: block;
+        }
+         .form-group input,
+         .form-group select {
+             padding: 14px;
+             border-radius: 8px;
+             width: 100%;
+             border: 1px solid var(--border-color);
+             font-family: 'Montserrat', sans-serif;
+             font-size: 0.95rem;
+             background-color: var(--white);
+         }
+         .form-group input:focus,
+         .form-group select:focus {
+             outline: none;
+             border-color: var(--primary-blue);
+             box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.2);
+         }
+          /* Ajuste para input[type=color] */
+         .form-group input[type="color"] {
+             padding: 5px; /* Padding menor */
+             height: 48px; /* Altura igual aos outros inputs */
+             cursor: pointer;
+         }
+           /* Ajuste para input[type=file] */
+          .form-group input[type="file"] {
+             padding: 10px; /* Padding interno */
+             background-color: var(--bg-light-gray); /* Fundo diferente */
+         }
+         .form-group input[type="file"]::file-selector-button { /* Estilo do botão interno */
+             padding: 8px 15px;
+             border-radius: 6px;
+             background-color: var(--primary-blue);
+             color: var(--white);
+             border: none;
+             cursor: pointer;
+             margin-right: 10px;
+             transition: background-color 0.3s ease;
+         }
+         .form-group input[type="file"]::file-selector-button:hover {
+             background-color: var(--dark-blue);
+         }
+          .form-group small { /* Texto de ajuda abaixo dos inputs */
+             display: block;
+             margin-top: 8px;
+             font-size: 0.8rem;
+             color: var(--text-light);
+         }
+
+
+         /* Estilo para grupo de checkbox */
+        .checkbox-group {
+            display: flex;
+            align-items: center;
+            margin-bottom: 1rem;
+        }
+         .checkbox-group input[type="checkbox"] {
+             width: auto;
+             margin-right: 10px;
+             height: 18px;
+             width: 18px;
+             cursor: pointer;
+              accent-color: var(--primary-blue); /* Cor do check */
+         }
+         .checkbox-group label {
+             margin-bottom: 0;
+             font-weight: 400;
+             font-size: 0.95rem;
+             color: var(--text-dark);
+             cursor: pointer;
+         }
+          /* Checkbox desabilitado */
+           .checkbox-group input[type="checkbox"]:disabled + label {
+                color: var(--text-light);
+                cursor: not-allowed;
+           }
+
+
+        .form-actions {
+            margin-top: 2.5rem;
+            text-align: right;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-color);
+        }
+
+        /* FIX: Estilo do Botão Salvar */
+        .settings-form .btn-submit {
+             width: auto;
+             padding: 12px 30px;
+             background: var(--gradient-primary); /* Gradiente azul */
+             color: var(--white); /* Texto branco */
+             border: none; /* Remove borda padrão se houver */
+        }
+         .settings-form .btn-submit:hover {
+             box-shadow: var(--shadow-hover); /* Efeito de sombra no hover */
+             /* Pode adicionar um escurecimento do gradiente se desejar */
+         }
+
+         /* Responsividade */
+         @media (max-width: 768px) {
+             .form-row {
+                 grid-template-columns: 1fr;
+                 gap: 1rem;
+             }
+             .form-section h4 {
+                 font-size: 1.1rem;
+             }
+             .form-actions {
+                  text-align: center; /* Centraliza botão */
+             }
+              .settings-form .btn-submit {
+                 width: 100%; /* Botão ocupa largura total */
+             }
+         }
+
+    </style>
+
+</body>
+</html>
