@@ -1,20 +1,20 @@
 /* * ARQUIVO: css/dashboard.css
- * Estilo v5.4 - Scrollbar Estilizada, Links por Perfil, Logo Maior, Espaçamentos Refinados
+ * Estilo v6.0 - Com Avatar no Header e Ajustes Finais
  */
 
 /* 1. VARIÁVEIS DE COR E GLOBAIS */
 :root {
-    --primary-blue: #1A73E8; 
-    --dark-blue: #0D47A1;   
-    --gradient-primary: linear-gradient(180deg, var(--dark-blue) 0%, var(--primary-blue) 100%); 
-    --bg-light-gray: #f4f6f9; /* Cinza um pouco mais perceptível */
-    --white: #ffffff;          
-    --text-dark: #212529;    
-    --text-light: #5f6368;   
-    --border-color: #e3e6f0; /* Borda mais suave */
-    --shadow-card: 0px 8px 25px -8px rgba(0, 0, 0, 0.08); /* Sombra mais suave */
+    --primary-blue: #1A73E8;
+    --dark-blue: #0D47A1;
+    --gradient-primary: linear-gradient(180deg, var(--dark-blue) 0%, var(--primary-blue) 100%);
+    --bg-light-gray: #f4f6f9;
+    --white: #ffffff;
+    --text-dark: #212529;
+    --text-light: #5f6368;
+    --border-color: #e3e6f0;
+    --shadow-card: 0px 8px 25px -8px rgba(0, 0, 0, 0.08);
     --shadow-hover: 0px 15px 35px -10px rgba(26, 115, 232, 0.3);
-    --sidebar-width: 260px; 
+    --sidebar-width: 260px;
 }
 
 * {
@@ -24,14 +24,14 @@
 }
 
 html {
-    scroll-behavior: smooth; 
+    scroll-behavior: smooth;
 }
 
 body {
     font-family: 'Montserrat', 'Segoe UI', Arial, sans-serif;
-    line-height: 1.6; /* Ligeiramente menor para mais densidade */
+    line-height: 1.6;
     color: var(--text-dark);
-    background-color: var(--bg-light-gray); 
+    background-color: var(--bg-light-gray);
     overflow-x: hidden;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -46,121 +46,105 @@ body {
 /* 3. SIDEBAR */
 .sidebar {
     width: var(--sidebar-width);
-    background: var(--gradient-primary); 
+    background: var(--gradient-primary);
     color: var(--white);
     display: flex;
     flex-direction: column;
-    position: fixed; 
+    position: fixed;
     left: 0;
     top: 0;
     height: 100%;
-    box-shadow: 4px 0px 20px rgba(0, 0, 0, 0.1); 
+    box-shadow: 4px 0px 20px rgba(0, 0, 0, 0.1);
     z-index: 100;
-    transition: width 0.3s ease, transform 0.3s ease; 
+    transition: width 0.3s ease, transform 0.3s ease;
 }
 
 .sidebar-header {
-    padding: 20px; /* Reduzido de volta */
+    padding: 20px;
     text-align: center;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .sidebar-header .logo-img {
-    max-height: 75px; /* FIX: Logo Maior */
+    max-height: 75px;
     width: auto;
     object-fit: contain;
 }
 
 .sidebar-nav {
-    flex-grow: 1; 
-    padding: 15px 0; /* Menos padding vertical */
-    overflow-y: auto; /* FIX: Habilita scroll */
-    overflow-x: hidden; /* Garante que não haja scroll horizontal */
+    flex-grow: 1;
+    padding: 15px 0;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
-/* FIX: ESTILIZAÇÃO DA BARRA DE ROLAGEM */
-.sidebar-nav::-webkit-scrollbar {
-    width: 6px; /* Largura da barra */
-}
-.sidebar-nav::-webkit-scrollbar-track {
-    background: rgba(0, 0, 0, 0.1); /* Cor do fundo da trilha */
-    border-radius: 10px;
-    margin: 5px 0; /* Espaço no topo/base */
-}
-.sidebar-nav::-webkit-scrollbar-thumb {
-    background-color: rgba(255, 255, 255, 0.4); /* Cor da barra */
-    border-radius: 10px;
-    border: 1px solid rgba(0, 0, 0, 0.1); /* Borda sutil */
-}
-.sidebar-nav::-webkit-scrollbar-thumb:hover {
-    background-color: rgba(255, 255, 255, 0.6); /* Cor ao passar o mouse */
-}
-/* Para Firefox (opcional, mas bom ter) */
-.sidebar-nav {
-  scrollbar-width: thin; /* "auto" ou "thin" */
-  scrollbar-color: rgba(255, 255, 255, 0.4) rgba(0, 0, 0, 0.1); /* thumb track */
-}
+/* Scrollbar Estilizada */
+.sidebar-nav::-webkit-scrollbar { width: 6px; }
+.sidebar-nav::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.1); border-radius: 10px; margin: 5px 0; }
+.sidebar-nav::-webkit-scrollbar-thumb { background-color: rgba(255, 255, 255, 0.4); border-radius: 10px; border: 1px solid rgba(0, 0, 0, 0.1); }
+.sidebar-nav::-webkit-scrollbar-thumb:hover { background-color: rgba(255, 255, 255, 0.6); }
+.sidebar-nav { scrollbar-width: thin; scrollbar-color: rgba(255, 255, 255, 0.4) rgba(0, 0, 0, 0.1); }
 
 
 .sidebar-nav ul {
     list-style: none;
-    padding-right: 5px; /* Espaço para a barra não colar no texto */
+    padding-right: 5px;
 }
 
 .sidebar-nav ul li a {
-    display: flex; 
+    display: flex;
     align-items: center;
-    padding: 14px 25px; /* Ajuste fino no padding */
-    color: #e0e0e0; 
+    padding: 14px 25px;
+    color: #e0e0e0;
     text-decoration: none;
     font-weight: 500;
-    font-size: 0.9rem; /* Fonte um pouco menor */
-    transition: all 0.2s ease; 
-    border-left: 4px solid transparent; 
-    white-space: nowrap; /* Impede quebra de linha */
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    border-left: 4px solid transparent;
+    white-space: nowrap;
 }
 
 .sidebar-nav ul li a:hover {
-    background-color: rgba(255, 255, 255, 0.08); /* Hover mais sutil */
+    background-color: rgba(255, 255, 255, 0.08);
     color: var(--white);
     border-left-color: var(--white);
 }
 
 .sidebar-nav ul li a.active {
-    background-color: rgba(0, 0, 0, 0.2); 
+    background-color: rgba(0, 0, 0, 0.2);
     color: var(--white);
     font-weight: 600;
     border-left-color: var(--white);
 }
 
-.sidebar-nav ul li a i { 
+.sidebar-nav ul li a i {
     margin-right: 15px;
-    font-size: 1rem; /* Ícones um pouco menores */
-    width: 20px; 
+    font-size: 1rem;
+    width: 20px;
     text-align: center;
-    line-height: 1; 
+    line-height: 1;
 }
 
 .sidebar-footer {
-    padding: 15px 20px; /* Menos padding */
+    padding: 15px 20px;
     border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .btn {
      display: inline-block;
-    padding: 10px 25px; /* Botões ligeiramente menores */
+    padding: 10px 25px;
     text-decoration: none;
-    border-radius: 8px; 
+    border-radius: 8px;
     font-weight: 500;
     text-align: center;
     border: none;
     cursor: pointer;
     transition: all 0.3s ease-in-out;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08); 
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 .btn:hover {
-     transform: translateY(-2px); 
-     box-shadow: 0 8px 20px rgba(26, 115, 232, 0.2); 
+     transform: translateY(-2px);
+     box-shadow: 0 8px 20px rgba(26, 115, 232, 0.2);
 }
 
 
@@ -169,13 +153,13 @@ body {
     background: rgba(255, 255, 255, 0.1);
     color: #e0e0e0;
     border: 1px solid rgba(255, 255, 255, 0.2);
-    padding: 10px 15px; /* Padding ajustado */
-    text-align: left; 
+    padding: 10px 15px;
+    text-align: left;
     display: flex;
     align-items: center;
-    font-size: 0.9rem; /* Fonte menor */
+    font-size: 0.9rem;
     transition: all 0.3s ease;
-    box-shadow: none; 
+    box-shadow: none;
     border-radius: 8px;
 }
 .btn-logout i {
@@ -189,42 +173,42 @@ body {
     background: rgba(255, 255, 255, 0.2);
     color: var(--white);
     border-color: var(--white);
-    transform: none; 
+    transform: none;
     box-shadow: none;
 }
 
 /* 4. PAINEL PRINCIPAL (Conteúdo) */
 .main-panel {
-    margin-left: var(--sidebar-width); 
-    width: calc(100% - var(--sidebar-width)); 
+    margin-left: var(--sidebar-width);
+    width: calc(100% - var(--sidebar-width));
     display: flex;
     flex-direction: column;
-    transition: margin-left 0.3s ease, width 0.3s ease; 
+    transition: margin-left 0.3s ease, width 0.3s ease;
 }
 
-/* 5. HEADER DO CONTEÚDO (Upgrade Visual) */
+/* 5. HEADER DO CONTEÚDO (Com Avatar) */
 .main-header {
     background-color: var(--white);
-    padding: 0 30px; /* Padding Horizontal Mantido */
-    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.05); 
-    position: sticky; 
+    padding: 0 30px;
+    box-shadow: 0px 2px 10px rgba(0, 0, 0, 0.05);
+    position: sticky;
     top: 0;
     z-index: 90;
-    height: 70px; /* Altura Mantida */
-    display: flex; 
-    align-items: center; 
-    border-bottom: 1px solid var(--border-color); 
+    height: 70px;
+    display: flex;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
 }
 
 .main-header .header-content {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 100%; 
+    width: 100%;
 }
 
 .main-header h1 {
-    font-size: 1.4rem; /* Título um pouco menor */
+    font-size: 1.4rem;
     font-weight: 600;
     margin-bottom: 0;
     color: var(--text-dark);
@@ -236,117 +220,128 @@ body {
     display: flex;
     align-items: center;
 }
-.user-info .user-icon { 
-    font-size: 1.5rem;
-    margin-left: 10px;
-    color: var(--text-light);
+/* Estilo do Avatar no Header */
+.user-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+    border: 1px solid var(--border-color);
+    display: inline-block; /* Garante visibilidade */
 }
 
 /* 6. ÁREA DE CONTEÚDO (Upgrade Visual) */
 .content-area {
-    padding: 35px; /* Padding ligeiramente ajustado */
-    flex-grow: 1; 
+    padding: 35px;
+    flex-grow: 1;
     background-color: var(--bg-light-gray);
 }
 
-/* Card (Upgrade Visual) */
-.card { 
+/* Card */
+.card {
     background-color: var(--white);
-    padding: 30px; /* Padding interno mantido */
-    border-radius: 12px; /* Arredondamento mantido */
+    padding: 30px;
+    border-radius: 12px;
     box-shadow: var(--shadow-card);
-    margin-bottom: 2.5rem; /* Mais espaço entre cards */
-    border: 1px solid #eef0f2; 
+    margin-bottom: 2.5rem;
+    border: 1px solid #eef0f2;
 }
 
 .content-area h2 {
-    font-size: 1.7rem; /* Tamanho ajustado */
-    margin-bottom: 1rem; 
+    font-size: 1.7rem;
+    margin-bottom: 1.5rem;
     text-align: left;
     color: var(--dark-blue);
-    font-weight: 600; /* Ligeiramente menos pesado */
+    font-weight: 600;
 }
 
-/* Título h3 (Upgrade Visual) */
+/* Título h3 */
 .user-summary h3 {
-    font-size: 1.4rem; /* Tamanho ajustado */
-    margin-bottom: 1.8rem; /* Espaço ajustado */
+    font-size: 1.4rem;
+    margin-bottom: 1.8rem;
     color: var(--text-dark);
     font-weight: 600;
-    padding-bottom: 10px; 
+    padding-bottom: 15px;
     border-bottom: 1px solid var(--border-color);
+}
+/* Título h4 (Ações Rápidas) */
+.card h4 {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--text-dark);
+    margin-bottom: 1rem;
 }
 
 
-/* Cards de Resumo (Upgrade Visual) */
+/* Cards de Resumo */
 .summary-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); /* Minmax ajustado */
-    gap: 2rem; /* Mais espaço */
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 2rem;
     margin-bottom: 2.5rem;
 }
 
 .summary-card {
     display: flex;
     align-items: center;
-    padding: 25px; /* Mais padding */
-    transition: all 0.3s ease; 
-    border-radius: 12px; /* Garante arredondamento */
+    padding: 25px;
+    transition: all 0.3s ease;
+    border-radius: 12px;
 }
 .summary-card:hover {
     transform: translateY(-5px);
-    box-shadow: var(--shadow-hover); 
+    box-shadow: var(--shadow-hover);
 }
 
 .summary-icon {
-    font-size: 2.2rem; /* Ícone menor */
-    margin-right: 1.2rem; /* Menos espaço */
-    padding: 15px; 
-    border-radius: 10px; /* Menos redondo */
+    font-size: 2.2rem;
+    margin-right: 1.5rem;
+    padding: 15px;
+    border-radius: 10px;
     color: var(--white);
-    width: 60px; 
-    height: 60px;
+    width: 65px;
+    height: 65px;
     display: flex;
     align-items: center;
     justify-content: center;
 }
 .summary-icon.blue { background-color: var(--primary-blue); }
-.summary-icon.green { background-color: #28a745; } 
-.summary-icon.purple { background-color: #6f42c1; } 
+.summary-icon.green { background-color: #28a745; }
+.summary-icon.purple { background-color: #6f42c1; }
 
 .summary-text h3 {
-    font-size: 0.85rem; 
-    text-transform: uppercase; 
+    font-size: 0.85rem;
+    text-transform: uppercase;
     letter-spacing: 0.5px;
-    font-weight: 600; 
+    font-weight: 600;
     color: var(--text-light);
-    margin-bottom: 0.2rem; /* Menos espaço */
+    margin-bottom: 0.2rem;
 }
 .summary-text p {
-    font-size: 1.9rem; /* Número ajustado */
+    font-size: 1.9rem;
     font-weight: 700;
     color: var(--text-dark);
     margin-bottom: 0;
 }
 
-/* Botões de Ação Rápida (Upgrade Visual) */
-/* FIX: Wrapper para espaçamento */
+/* Botões de Ação Rápida */
 .actions-wrapper {
     display: flex;
-    flex-wrap: wrap; /* Permite quebra de linha */
-    gap: 15px; /* Espaço entre os botões */
-    margin-top: 1.5rem; /* FIX: Mais espaço acima dos botões */
+    flex-wrap: wrap;
+    gap: 15px;
+    margin-top: 1.5rem;
 }
 .btn-quick-action {
     background-color: var(--white);
     color: var(--primary-blue);
     border: 1px solid var(--primary-blue);
-    /* Removido margin-right e margin-bottom */
-    padding: 8px 18px; 
+    padding: 8px 18px;
     font-weight: 500;
-    font-size: 0.9rem; 
+    font-size: 0.9rem;
     box-shadow: none;
     border-radius: 8px;
+     margin: 0;
 }
 .btn-quick-action:hover {
     background-color: var(--primary-blue);
@@ -356,17 +351,17 @@ body {
     transform: translateY(-2px);
 }
 
-/* Listas (Upgrade Visual) */
+/* Listas */
 .content-area .card ul {
     list-style: none;
     padding-left: 0;
-    margin-top: 1rem; 
+    margin-top: 1.5rem;
 }
 .content-area .card li {
-    padding: 12px 0; 
-    border-bottom: 1px solid #f0f2f5; 
+    padding: 12px 0;
+    border-bottom: 1px solid #f0f2f5;
     color: var(--text-light);
-    font-size: 0.95rem; 
+    font-size: 0.95rem;
 }
 .content-area .card li:last-child {
     border-bottom: none;
@@ -375,78 +370,30 @@ body {
 
 /* 7. RESPONSIVIDADE */
 @media (max-width: 992px) {
-    :root {
-        --sidebar-width: 220px; 
-    }
-     .sidebar-nav ul li a {
-        padding: 12px 20px;
-        font-size: 0.9rem;
-    }
-     .main-header h1 {
-         font-size: 1.3rem;
-     }
-     .content-area {
-         padding: 30px; 
-     }
+    :root { --sidebar-width: 220px; }
+     .sidebar-nav ul li a { padding: 12px 20px; font-size: 0.9rem; }
+     .main-header h1 { font-size: 1.3rem; }
+     .content-area { padding: 30px; }
 }
 
 @media (max-width: 768px) {
-    :root {
-        --sidebar-width: 0; 
-    }
-    .sidebar {
-        transform: translateX(-100%); 
-        transition: transform 0.3s ease;
-        position: fixed; 
-        height: 100vh;
-    }
-    .main-panel {
-        margin-left: 0; 
-        width: 100%;
-    }
-     .main-header {
-         padding: 0 20px; 
-         height: 65px; 
-     }
-      .main-header h1 {
-         font-size: 1.2rem;
-     }
-     .content-area {
-         padding: 25px; 
-     }
-    .sidebar.active {
-        transform: translateX(0);
-        width: 240px; 
-         box-shadow: 5px 0px 15px rgba(0, 0, 0, 0.2);
-    }
-    .hamburger-btn { 
-        display: block; 
-        background: none;
-        border: none;
-        font-size: 1.5rem;
-        cursor: pointer;
-        color: var(--text-dark);
-        margin-right: 15px; 
-    }
-    .main-header .header-content {
-        justify-content: flex-start; 
-    }
-    .main-header h1 {
-        margin-left: 10px;
-    }
-     .user-info {
-        margin-left: auto; 
-    }
-     .summary-grid {
-         grid-template-columns: 1fr; 
-     }
-      .actions-wrapper {
-         gap: 10px; 
-     }
+    :root { --sidebar-width: 0; }
+    .sidebar { transform: translateX(-100%); transition: transform 0.3s ease; position: fixed; height: 100vh; }
+    .main-panel { margin-left: 0; width: 100%; }
+     .main-header { padding: 0 20px; height: 65px; }
+      .main-header h1 { font-size: 1.2rem; }
+     .content-area { padding: 25px; }
+    .sidebar.active { transform: translateX(0); width: 240px; box-shadow: 5px 0px 15px rgba(0, 0, 0, 0.2); }
+    .hamburger-btn { display: block; background: none; border: none; font-size: 1.5rem; cursor: pointer; color: var(--text-dark); margin-right: 15px; }
+    .main-header .header-content { justify-content: flex-start; }
+    .main-header h1 { margin-left: 10px; }
+     .user-info { margin-left: auto; }
+     .user-avatar { width: 28px; height: 28px; margin-right: 8px; } /* Ajuste avatar mobile */
+     .user-info span { font-size: 0.9rem; }
+     .summary-grid { grid-template-columns: 1fr; }
+      .actions-wrapper { gap: 10px; }
 }
 
 @media (min-width: 769px) {
-    .hamburger-btn {
-        display: none;
-    }
+    .hamburger-btn { display: none; }
 }
