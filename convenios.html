@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Convênios - Clínica Médica</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <link rel="stylesheet" href="css/dashboard.css">
+
+    <style>
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border-color); }
+        .card-header h2 { margin-bottom: 0; }
+        .card-header .btn-primary { padding: 10px 18px; font-size: 0.9rem; background: var(--gradient-primary); border: none; }
+        .card-header .btn-primary:hover { box-shadow: var(--shadow-hover); }
+        .card-header .btn i { margin-right: 8px; }
+
+        .table-responsive { overflow-x: auto; }
+        .data-table { width: 100%; border-collapse: collapse; margin-top: 0; }
+        .data-table th, .data-table td { padding: 15px; text-align: left; border-bottom: 1px solid var(--border-color); vertical-align: middle; white-space: nowrap; }
+        .data-table th { background-color: var(--bg-light-gray); font-weight: 600; color: var(--text-dark); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; }
+        .data-table td { color: var(--text-dark); font-size: 0.9rem; }
+        .data-table tbody tr:hover { background-color: #f1f5f9; }
+        .actions-col { width: 130px; text-align: center; }
+
+        .data-table td .action-btn { background: none; border: none; padding: 6px 8px; cursor: pointer; font-size: 1rem; color: var(--text-light); transition: color 0.2s ease, transform 0.2s ease; margin: 0 4px; }
+        .data-table td .action-btn:hover { transform: scale(1.1); }
+        .data-table td .action-btn.edit:hover { color: var(--primary-blue); }
+        .data-table td .action-btn.delete:hover { color: #dc3545; }
+
+        /* Estilo para Status (Ativo/Inativo) */
+        .status-badge { padding: 5px 10px; border-radius: 6px; font-size: 0.8rem; font-weight: 600; color: var(--white); background-color: var(--text-light); text-transform: uppercase; letter-spacing: 0.5px; }
+        .status-badge.ativo { background-color: #28a745; } /* Verde */
+        .status-badge.inativo { background-color: #6c757d; } /* Cinza */
+
+        /* --- ESTILOS DO MODAL (Copiado de pacientes.html) --- */
+        .modal { display: none; position: fixed; z-index: 1050; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0, 0, 0, 0.55); justify-content: center; align-items: center; padding: 20px; }
+        .modal-content { background-color: var(--white); margin: auto; padding: 0; border-radius: 12px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); position: relative; width: 90%; max-width: 650px; animation: fadeInModal 0.3s ease-out; border: 1px solid var(--border-color); }
+        .modal-content.small-modal { max-width: 450px; }
+        @keyframes fadeInModal { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding: 20px 30px; }
+        .modal-header h3 { margin-bottom: 0; font-size: 1.4rem; font-weight: 600; color: var(--dark-blue); }
+        .close-btn { color: #888; font-size: 1.5rem; font-weight: bold; background: none; border: none; cursor: pointer; padding: 0; line-height: 1; opacity: 0.7; transition: opacity 0.2s ease; }
+        .close-btn:hover, .close-btn:focus { color: var(--text-dark); opacity: 1; text-decoration: none; }
+        .modal-body { padding: 30px; max-height: 65vh; overflow-y: auto; }
+        .modal-body .form-group { margin-bottom: 1.2rem; }
+        .modal-body .form-group label { font-size: 0.85rem; font-weight: 500; color: var(--text-dark); margin-bottom: 6px; display: block; }
+        .modal-body .form-group input, .modal-body .form-group select { padding: 14px; border-radius: 8px; width: 100%; border: 1px solid var(--border-color); font-family: 'Montserrat', sans-serif; font-size: 0.95rem; }
+        .modal-body .form-group input:focus, .modal-body .form-group select:focus { outline: none; border-color: var(--primary-blue); box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.2); }
+         .modal-body .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+        .modal-footer { display: flex; justify-content: flex-end; gap: 12px; padding: 20px 30px; border-top: 1px solid var(--border-color); background-color: var(--bg-light-gray); border-radius: 0 0 12px 12px; }
+        .modal-footer .btn-primary { background: var(--gradient-primary); border: none; color: var(--white); padding: 10px 25px; }
+        .modal-footer .btn-primary:hover { box-shadow: var(--shadow-hover); }
+        .modal-footer .btn-secondary { background-color: var(--white); color: var(--text-light); border: 1px solid var(--border-color); padding: 10px 25px; box-shadow: none; }
+        .modal-footer .btn-secondary:hover { background-color: var(--bg-light-gray); border-color: #adb5bd; color: var(--text-dark); box-shadow: none; transform: none; }
+        .modal-footer .btn-danger { background-color: #dc3545; color: var(--white); border: none; padding: 10px 25px; }
+        .modal-footer .btn-danger:hover { background-color: #c82333; box-shadow: 0 4px 10px rgba(220, 53, 69, 0.3); }
+        .modal-open { display: flex; }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-layout">
+
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="assets/clinica-logo.jpg" alt="Logo Clínica Médica" class="logo-img">
+            </div>
+            <nav class="sidebar-nav">
+                <ul id="sidebarMenu"></ul>
+            </nav>
+            <div class="sidebar-footer">
+                 <button id="logoutButton" class="btn btn-logout">
+                    <i class="fas fa-sign-out-alt"></i> Sair
+                 </button>
+            </div>
+        </aside>
+
+        <div class="main-panel">
+
+            <header class="main-header">
+                <div class="header-content">
+                    <h1 id="pageTitle">Convênios</h1>
+                    <div class="user-info">
+                        <span id="userName">Carregando...</span>
+                    </div>
+                </div>
+            </header>
+
+            <main class="content-area" id="mainContent">
+
+                <div class="card">
+
+                    <div class="card-header">
+                        <h2>Gerenciar Convênios</h2>
+                        <button id="btnNovoConvenio" class="btn btn-primary"><i class="fas fa-plus"></i> Novo Convênio</button>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Nome do Convênio</th>
+                                    <th>Cobertura (Exemplo)</th>
+                                    <th>Telefone Contato</th>
+                                    <th>Status</th>
+                                    <th class="actions-col">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Unimed</td>
+                                    <td>Plano Completo (100%)</td>
+                                    <td>(34) 3239-9999</td>
+                                    <td><span class="status-badge ativo">Ativo</span></td>
+                                    <td class="actions-col">
+                                        <button class="action-btn edit" title="Editar" data-id="1" data-nome="Unimed"><i class="fas fa-edit"></i></button>
+                                        <button class="action-btn delete" title="Excluir" data-id="1" data-nome="Unimed"><i class="fas fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Amil</td>
+                                    <td>Plano Essencial (80%)</td>
+                                    <td>0800-707-1000</td>
+                                    <td><span class="status-badge ativo">Ativo</span></td>
+                                    <td class="actions-col">
+                                        <button class="action-btn edit" title="Editar" data-id="2" data-nome="Amil"><i class="fas fa-edit"></i></button>
+                                        <button class="action-btn delete" title="Excluir" data-id="2" data-nome="Amil"><i class="fas fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>SulAmérica</td>
+                                    <td>-</td>
+                                    <td>(11) 4004-5900</td>
+                                    <td><span class="status-badge inativo">Inativo</span></td>
+                                    <td class="actions-col">
+                                        <button class="action-btn edit" title="Editar" data-id="3" data-nome="SulAmérica"><i class="fas fa-edit"></i></button>
+                                        <button class="action-btn delete" title="Excluir" data-id="3" data-nome="SulAmérica"><i class="fas fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <div id="convenioFormModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="convenioFormTitle">Novo Convênio</h3>
+                <button type="button" class="close-btn" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="convenioForm">
+                    <input type="hidden" id="convenioId" name="convenioId">
+                    <div class="form-group">
+                        <label for="convenioNome">Nome do Convênio</label>
+                        <input type="text" id="convenioNome" name="convenioNome" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="convenioTelefone">Telefone de Contato</label>
+                            <input type="tel" id="convenioTelefone" name="convenioTelefone" placeholder="(XX) XXXX-XXXX">
+                        </div>
+                        <div class="form-group">
+                            <label for="convenioStatus">Status</label>
+                            <select id="convenioStatus" name="convenioStatus" required>
+                                <option value="ativo">Ativo</option>
+                                <option value="inativo">Inativo</option>
+                            </select>
+                        </div>
+                    </div>
+                     <div class="form-group">
+                        <label for="convenioCobertura">Descrição da Cobertura (Exemplo)</label>
+                        <input type="text" id="convenioCobertura" name="convenioCobertura" placeholder="Ex: Plano Completo (100%)">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="submit" form="convenioForm" class="btn btn-primary">Salvar Convênio</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="deleteConfirmModal" class="modal">
+        <div class="modal-content small-modal">
+            <div class="modal-header">
+                <h3>Confirmar Exclusão</h3>
+                <button type="button" class="close-btn" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center; font-size: 1.1rem;"><i class="fas fa-exclamation-triangle" style="color: #dc3545; margin-right: 10px;"></i>Tem certeza?</p>
+                <p>Você realmente deseja excluir o convênio <strong id="deleteConvenioName" style="color: var(--text-dark);"></strong>?</p>
+                <p style="font-size: 0.9rem; color: var(--text-light);">Esta ação não pode ser desfeita.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="confirmDeleteBtn" class="btn btn-danger">Excluir</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="js/dashboard.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            
+            // --- LÓGICA DOS MODAIS ---
+            const convenioFormModal = $('#convenioFormModal');
+            const deleteConfirmModal = $('#deleteConfirmModal');
+            
+            // Dados fictícios para edição
+            const dadosFicticios = {
+                1: { tel: "(34) 3239-9999", status: "ativo", cob: "Plano Completo (100%)" },
+                2: { tel: "0800-707-1000", status: "ativo", cob: "Plano Essencial (80%)" },
+                3: { tel: "(11) 4004-5900", status: "inativo", cob: "-" }
+            };
+
+            // Abrir Novo
+            $('#btnNovoConvenio').on('click', function() {
+                $('#convenioFormTitle').text('Novo Convênio');
+                $('#convenioForm')[0].reset();
+                $('#convenioId').val('');
+                $('#convenioStatus').val('ativo'); // Padrão
+                convenioFormModal.addClass('modal-open');
+            });
+
+            // Abrir Editar
+            $('.data-table').on('click', '.action-btn.edit', function() {
+                const convenioId = $(this).data('id');
+                const convenioNome = $(this).data('nome');
+                
+                $('#convenioFormTitle').text('Editar Convênio');
+                $('#convenioId').val(convenioId);
+                
+                // Preenchimento fictício...
+                const dados = dadosFicticios[convenioId];
+                $('#convenioNome').val(convenioNome);
+                $('#convenioTelefone').val(dados.tel);
+                $('#convenioStatus').val(dados.status);
+                $('#convenioCobertura').val(dados.cob);
+                
+                convenioFormModal.addClass('modal-open');
+            });
+
+             // Abrir Confirmar Exclusão
+            $('.data-table').on('click', '.action-btn.delete', function() {
+                const convenioId = $(this).data('id');
+                const convenioNome = $(this).data('nome');
+                
+                $('#deleteConvenioName').text(convenioNome);
+                $('#confirmDeleteBtn').data('id', convenioId);
+                deleteConfirmModal.addClass('modal-open');
+            });
+
+            // Fechar Modais
+            $('.close-btn, [data-dismiss="modal"]').on('click', function() {
+                $(this).closest('.modal').removeClass('modal-open');
+            });
+            $('.modal').on('click', function(event) {
+                if ($(event.target).hasClass('modal')) $(this).removeClass('modal-open');
+            });
+
+            // Submits Fictícios
+            $('#convenioForm').on('submit', function(event) {
+                event.preventDefault();
+                const convenioId = $('#convenioId').val();
+                if (convenioId) { alert('Convênio (ID: ' + convenioId + ') "atualizado"! (Simulação)'); }
+                else { alert('Novo convênio "salvo"! (Simulação)'); }
+                convenioFormModal.removeClass('modal-open');
+            });
+            
+            $('#confirmDeleteBtn').on('click', function() {
+                 const convenioId = $(this).data('id');
+                 alert('Convênio (ID: ' + convenioId + ') "excluído"! (Simulação)');
+                 deleteConfirmModal.removeClass('modal-open');
+            });
+
+        }); // Fim do document ready
+    </script>
+
+</body>
+</html>

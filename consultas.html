@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consultas - Clínica Médica</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <link rel="stylesheet" href="css/dashboard.css">
+
+    <style>
+        /* --- Estilos para Header, Filtros e Tabela (Baseado em pacientes.html) --- */
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border-color); }
+        .card-header h2 { margin-bottom: 0; }
+        .card-header .btn-primary { padding: 10px 18px; font-size: 0.9rem; background: var(--gradient-primary); border: none; }
+        .card-header .btn-primary:hover { box-shadow: var(--shadow-hover); }
+        .card-header .btn i { margin-right: 8px; }
+
+        .filters { display: flex; flex-wrap: wrap; gap: 1.5rem; margin-bottom: 2.5rem; padding: 20px; background-color: var(--bg-light-gray); border-radius: 8px; border: 1px solid var(--border-color); }
+        .filters .form-group { margin-bottom: 0; flex-grow: 1; min-width: 200px; }
+        .filters .form-group label { font-size: 0.8rem; font-weight: 500; margin-bottom: 5px; color: var(--text-dark); }
+        .filters .form-group input, .filters .form-group select { padding: 12px; font-size: 0.9rem; border-radius: 6px; width: 100%; border: 1px solid var(--border-color); font-family: 'Montserrat', sans-serif; }
+        .filters .btn-filter { align-self: flex-end; padding: 11px 20px; font-size: 0.9rem; background-color: var(--text-light); color: var(--white); border: none; }
+        .filters .btn-filter:hover { background-color: var(--text-dark); box-shadow: 0 4px 10px rgba(0,0,0,0.2); transform: translateY(-2px); }
+        .filters .btn i { margin-right: 5px; }
+
+        .table-responsive { overflow-x: auto; }
+        .data-table { width: 100%; border-collapse: collapse; margin-top: 0; }
+        .data-table th, .data-table td { padding: 15px; text-align: left; border-bottom: 1px solid var(--border-color); vertical-align: middle; white-space: nowrap; }
+        .data-table th { background-color: var(--bg-light-gray); font-weight: 600; color: var(--text-dark); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; }
+        .data-table td { color: var(--text-dark); font-size: 0.9rem; }
+        .data-table tbody tr:hover { background-color: #f1f5f9; }
+        .actions-col { width: 130px; text-align: center; }
+
+        .data-table td .action-btn { background: none; border: none; padding: 6px 8px; cursor: pointer; font-size: 1rem; color: var(--text-light); transition: color 0.2s ease, transform 0.2s ease; margin: 0 4px; }
+        .data-table td .action-btn:hover { transform: scale(1.1); }
+        .data-table td .action-btn.edit:hover { color: var(--primary-blue); }
+        .data-table td .action-btn.cancel:hover { color: #dc3545; }
+        .data-table td .action-btn.details:hover { color: #6f42c1; }
+
+        /* --- Estilos para Status da Consulta --- */
+        .status-badge { padding: 5px 10px; border-radius: 6px; font-size: 0.8rem; font-weight: 600; color: var(--white); background-color: var(--text-light); text-transform: uppercase; letter-spacing: 0.5px; }
+        .status-badge.confirmada { background-color: #28a745; } /* Verde */
+        .status-badge.pendente { background-color: #ffc107; color: var(--text-dark); } /* Amarelo */
+        .status-badge.cancelada { background-color: #dc3545; } /* Vermelho */
+
+        /* --- ESTILOS DO MODAL (Copiado de pacientes.html) --- */
+        .modal { display: none; position: fixed; z-index: 1050; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0, 0, 0, 0.55); justify-content: center; align-items: center; padding: 20px; }
+        .modal-content { background-color: var(--white); margin: auto; padding: 0; border-radius: 12px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); position: relative; width: 90%; max-width: 650px; animation: fadeInModal 0.3s ease-out; border: 1px solid var(--border-color); }
+        .modal-content.small-modal { max-width: 450px; }
+        @keyframes fadeInModal { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding: 20px 30px; }
+        .modal-header h3 { margin-bottom: 0; font-size: 1.4rem; font-weight: 600; color: var(--dark-blue); }
+        .close-btn { color: #888; font-size: 1.5rem; font-weight: bold; background: none; border: none; cursor: pointer; padding: 0; line-height: 1; opacity: 0.7; transition: opacity 0.2s ease; }
+        .close-btn:hover, .close-btn:focus { color: var(--text-dark); opacity: 1; text-decoration: none; }
+        .modal-body { padding: 30px; max-height: 65vh; overflow-y: auto; }
+         .modal-body .form-group { margin-bottom: 1.2rem; }
+         .modal-body .form-group label { font-size: 0.85rem; font-weight: 500; color: var(--text-dark); margin-bottom: 6px; display: block; }
+          .modal-body .form-group input, .modal-body .form-group select, .modal-body .form-group textarea { padding: 14px; border-radius: 8px; width: 100%; border: 1px solid var(--border-color); font-family: 'Montserrat', sans-serif; font-size: 0.95rem; }
+           .modal-body .form-group input:focus, .modal-body .form-group select:focus, .modal-body .form-group textarea:focus { outline: none; border-color: var(--primary-blue); box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.2); }
+         .modal-body .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+        .modal-footer { display: flex; justify-content: flex-end; gap: 12px; padding: 20px 30px; border-top: 1px solid var(--border-color); background-color: var(--bg-light-gray); border-radius: 0 0 12px 12px; }
+         .modal-footer .btn-primary { background: var(--gradient-primary); border: none; color: var(--white); padding: 10px 25px; }
+         .modal-footer .btn-primary:hover { box-shadow: var(--shadow-hover); }
+         .modal-footer .btn-secondary { background-color: var(--white); color: var(--text-light); border: 1px solid var(--border-color); padding: 10px 25px; box-shadow: none; }
+         .modal-footer .btn-secondary:hover { background-color: var(--bg-light-gray); border-color: #adb5bd; color: var(--text-dark); box-shadow: none; transform: none; }
+         .modal-footer .btn-danger { background-color: #dc3545; color: var(--white); border: none; padding: 10px 25px; }
+         .modal-footer .btn-danger:hover { background-color: #c82333; box-shadow: 0 4px 10px rgba(220, 53, 69, 0.3); }
+         .modal-open { display: flex; }
+         
+         /* Classe para esconder botões (definida em dashboard.js, usada em pacientes.html) */
+         .hide-for-medico { display: none !important; }
+
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-layout">
+
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="assets/clinica-logo.jpg" alt="Logo Clínica Médica" class="logo-img">
+            </div>
+            <nav class="sidebar-nav">
+                <ul id="sidebarMenu"></ul>
+            </nav>
+            <div class="sidebar-footer">
+                 <button id="logoutButton" class="btn btn-logout">
+                    <i class="fas fa-sign-out-alt"></i> Sair
+                 </button>
+            </div>
+        </aside>
+
+        <div class="main-panel">
+
+            <header class="main-header">
+                <div class="header-content">
+                    <h1 id="pageTitle">Consultas</h1>
+                    <div class="user-info">
+                        <span id="userName">Carregando...</span>
+                    </div>
+                </div>
+            </header>
+
+            <main class="content-area" id="mainContent">
+
+                <div class="card">
+
+                    <div class="card-header">
+                        <h2>Gerenciar Consultas</h2>
+                        <button id="btnNovaConsulta" class="btn btn-primary"><i class="fas fa-calendar-plus"></i> Nova Consulta</button>
+                    </div>
+
+                    <div class="filters">
+                        <div class="form-group">
+                            <label for="filterPaciente">Filtrar por Paciente:</label>
+                            <input type="text" id="filterPaciente" placeholder="Nome do paciente...">
+                        </div>
+                        <div class="form-group">
+                            <label for="filterMedico">Filtrar por Médico:</label>
+                            <select id="filterMedico">
+                                <option value="">Todos</option>
+                                <option value="1">Dr. João Silva</option>
+                                <option value="2">Dra. Maria Souza</option>
+                            </select>
+                        </div>
+                         <div class="form-group">
+                            <label for="filterData">Filtrar por Data:</label>
+                            <input type="date" id="filterData">
+                        </div>
+                        <button class="btn btn-secondary btn-filter"><i class="fas fa-search"></i> Filtrar</button>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Paciente</th>
+                                    <th>Médico</th>
+                                    <th>Especialidade</th>
+                                    <th>Data</th>
+                                    <th>Hora</th>
+                                    <th>Status</th>
+                                    <th class="actions-col">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Ana Pereira da Silva</td>
+                                    <td>Dr. João Silva</td>
+                                    <td>Cardiologia</td>
+                                    <td>25/10/2025</td>
+                                    <td>10:00</td>
+                                    <td><span class="status-badge confirmada">Confirmada</span></td>
+                                    <td class="actions-col">
+                                        <button class="action-btn edit" title="Editar" data-id="1"><i class="fas fa-edit"></i></button>
+                                        <button class="action-btn cancel" title="Cancelar" data-id="1" data-paciente="Ana Pereira da Silva"><i class="fas fa-calendar-times"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>José Carlos Mendes</td>
+                                    <td>Dra. Maria Souza</td>
+                                    <td>Ortopedia</td>
+                                    <td>25/10/2025</td>
+                                    <td>11:30</td>
+                                    <td><span class="status-badge pendente">Pendente</span></td>
+                                    <td class="actions-col">
+                                        <button class="action-btn edit" title="Editar" data-id="2"><i class="fas fa-edit"></i></button>
+                                        <button class="action-btn cancel" title="Cancelar" data-id="2" data-paciente="José Carlos Mendes"><i class="fas fa-calendar-times"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Mariana Costa Oliveira</td>
+                                    <td>Dr. João Silva</td>
+                                    <td>Cardiologia</td>
+                                    <td>26/10/2025</td>
+                                    <td>09:00</td>
+                                    <td><span class="status-badge confirmada">Confirmada</span></td>
+                                    <td class="actions-col">
+                                        <button class="action-btn edit" title="Editar" data-id="3"><i class="fas fa-edit"></i></button>
+                                        <button class="action-btn cancel" title="Cancelar" data-id="3" data-paciente="Mariana Costa Oliveira"><i class="fas fa-calendar-times"></i></button>
+                                    </td>
+                                </tr>
+                                 <tr>
+                                    <td>Ricardo Alves</td>
+                                    <td>Dr. João Silva</td>
+                                    <td>Cardiologia</td>
+                                    <td>24/10/2025</td>
+                                    <td>15:00</td>
+                                    <td><span class="status-badge cancelada">Cancelada</span></td>
+                                    <td class="actions-col">
+                                        <button class="action-btn details" title="Ver Detalhes" data-id="4"><i class="fas fa-eye"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <div id="consultaFormModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="consultaFormTitle">Nova Consulta</h3>
+                <button type="button" class="close-btn" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="consultaForm">
+                    <input type="hidden" id="consultaId" name="consultaId">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="consultaPaciente">Paciente</label>
+                            <select id="consultaPaciente" name="consultaPaciente" required>
+                                <option value="">Selecione...</option>
+                                <option value="1">Ana Pereira da Silva</option>
+                                <option value="2">José Carlos Mendes</option>
+                                <option value="3">Mariana Costa Oliveira</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="consultaMedico">Médico</label>
+                            <select id="consultaMedico" name="consultaMedico" required>
+                                 <option value="">Selecione...</option>
+                                <option value="1">Dr. João Silva (Cardiologia)</option>
+                                <option value="2">Dra. Maria Souza (Ortopedia)</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="consultaData">Data</label>
+                            <input type="date" id="consultaData" name="consultaData" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="consultaHora">Hora</label>
+                            <input type="time" id="consultaHora" name="consultaHora" required>
+                        </div>
+                    </div>
+                     <div class="form-group">
+                        <label for="consultaStatus">Status</label>
+                        <select id="consultaStatus" name="consultaStatus" required>
+                            <option value="pendente">Pendente</option>
+                            <option value="confirmada">Confirmada</option>
+                            <option value="cancelada">Cancelada</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="consultaObs">Observações (Opcional)</label>
+                        <textarea id="consultaObs" name="consultaObs" rows="3"></textarea>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="submit" form="consultaForm" class="btn btn-primary">Salvar Consulta</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="cancelConfirmModal" class="modal">
+        <div class="modal-content small-modal">
+            <div class="modal-header">
+                <h3>Confirmar Cancelamento</h3>
+                <button type="button" class="close-btn" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center; font-size: 1.1rem;"><i class="fas fa-exclamation-triangle" style="color: #dc3545; margin-right: 10px;"></i>Tem certeza?</p>
+                <p>Você realmente deseja cancelar a consulta do paciente <strong id="cancelConsultaName" style="color: var(--text-dark);"></strong>?</p>
+                <p style="font-size: 0.9rem; color: var(--text-light);">Esta ação não pode ser desfeita.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Manter Consulta</button>
+                <button type="button" id="confirmCancelBtn" class="btn btn-danger">Cancelar Consulta</button>
+            </div>
+        </div>
+    </div>
+
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="js/dashboard.js"></script>
+
+    <script>
+        // CORREÇÃO: $(document).ready ao invés de $(document.ready
+        $(document).ready(function() {
+            
+            // --- VERIFICA PERFIL (dashboard.js deve rodar primeiro) ---
+            const userType = localStorage.getItem('userType');
+            
+            // Médico não pode agendar ou cancelar (exemplo, ajuste se necessário)
+            if (userType === 'medico') {
+                $('#btnNovaConsulta').addClass('hide-for-medico'); // Esconde "Nova Consulta"
+                $('.data-table .action-btn.edit').addClass('hide-for-medico'); // Esconde "Editar"
+                $('.data-table .action-btn.cancel').addClass('hide-for-medico'); // Esconde "Cancelar"
+                $('.card-header h2').text('Visualizar Consultas'); // Muda título
+            }
+
+            // --- LÓGICA DOS MODAIS (Baseada em pacientes.html) ---
+            const consultaFormModal = $('#consultaFormModal');
+            const cancelConfirmModal = $('#cancelConfirmModal');
+
+            // Abrir Novo
+            $('#btnNovaConsulta').on('click', function() {
+                if (!$(this).hasClass('hide-for-medico')) {
+                    $('#consultaFormTitle').text('Nova Consulta');
+                    $('#consultaForm')[0].reset();
+                    $('#consultaId').val('');
+                    consultaFormModal.addClass('modal-open');
+                }
+            });
+
+            // Abrir Editar
+            $('.data-table').on('click', '.action-btn.edit:not(.hide-for-medico)', function() {
+                const consultaId = $(this).data('id');
+                $('#consultaFormTitle').text('Editar Consulta');
+                $('#consultaId').val(consultaId);
+                
+                // Preenchimento fictício...
+                if (consultaId == 1) { // Ana Pereira
+                    $('#consultaPaciente').val('1');
+                    $('#consultaMedico').val('1');
+                    $('#consultaData').val('2025-10-25');
+                    $('#consultaHora').val('10:00');
+                    $('#consultaStatus').val('confirmada');
+                } else if (consultaId == 2) { // José Carlos
+                     $('#consultaPaciente').val('2');
+                     $('#consultaMedico').val('2');
+                     $('#consultaData').val('2025-10-25');
+                     $('#consultaHora').val('11:30');
+                     $('#consultaStatus').val('pendente');
+                } else {
+                     $('#consultaPaciente').val('3');
+                     $('#consultaMedico').val('1');
+                     $('#consultaData').val('2025-10-26');
+                     $('#consultaHora').val('09:00');
+                     $('#consultaStatus').val('confirmada');
+                }
+                
+                consultaFormModal.addClass('modal-open');
+            });
+
+            $('.data-table').on('click', '.action-btn.cancel:not(.hide-for-medico)', function() {
+                const consultaId = $(this).data('id');
+                const pacienteName = $(this).data('paciente');
+                
+                $('#cancelConsultaName').text(pacienteName);
+                $('#confirmCancelBtn').data('id', consultaId);
+                cancelConfirmModal.addClass('modal-open');
+            });
+
+            $('.close-btn, [data-dismiss="modal"]').on('click', function() {
+                $(this).closest('.modal').removeClass('modal-open');
+            });
+            $('.modal').on('click', function(event) {
+                if ($(event.target).hasClass('modal')) $(this).removeClass('modal-open');
+            });
+
+            $('#consultaForm').on('submit', function(event) {
+                event.preventDefault();
+                const consultaId = $('#consultaId').val();
+                if (consultaId) { alert('Consulta (ID: ' + consultaId + ') "atualizada"! (Simulação)'); }
+                else { alert('Nova consulta "agendada"! (Simulação)'); }
+                consultaFormModal.removeClass('modal-open');
+            });
+            
+            $('#confirmCancelBtn').on('click', function() {
+                 const consultaId = $(this).data('id');
+                 alert('Consulta (ID: ' + consultaId + ') "cancelada"! (Simulação)');
+                 cancelConfirmModal.removeClass('modal-open');
+            });
+
+        });
+    </script>
+
+</body>
+</html>

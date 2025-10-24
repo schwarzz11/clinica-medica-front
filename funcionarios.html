@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale-1.0">
+    <title>Funcionários - Clínica Médica</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <link rel="stylesheet" href="css/dashboard.css">
+
+    <style>
+        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 2rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border-color); }
+        .card-header h2 { margin-bottom: 0; }
+        .card-header .btn-primary { padding: 10px 18px; font-size: 0.9rem; background: var(--gradient-primary); border: none; }
+        .card-header .btn-primary:hover { box-shadow: var(--shadow-hover); }
+        .card-header .btn i { margin-right: 8px; }
+
+        .filters { display: flex; flex-wrap: wrap; gap: 1.5rem; margin-bottom: 2.5rem; padding: 20px; background-color: var(--bg-light-gray); border-radius: 8px; border: 1px solid var(--border-color); }
+        .filters .form-group { margin-bottom: 0; flex-grow: 1; min-width: 220px; }
+        .filters .form-group label { font-size: 0.8rem; font-weight: 500; margin-bottom: 5px; color: var(--text-dark); }
+        .filters .form-group input, .filters .form-group select { padding: 12px; font-size: 0.9rem; border-radius: 6px; width: 100%; border: 1px solid var(--border-color); font-family: 'Montserrat', sans-serif;}
+        .filters .btn-filter { align-self: flex-end; padding: 11px 20px; font-size: 0.9rem; background-color: var(--text-light); color: var(--white); border: none; }
+        .filters .btn-filter:hover { background-color: var(--text-dark); box-shadow: 0 4px 10px rgba(0,0,0,0.2); transform: translateY(-2px); }
+        .filters .btn i { margin-right: 5px; }
+
+        .table-responsive { overflow-x: auto; }
+        .data-table { width: 100%; border-collapse: collapse; margin-top: 0; }
+        .data-table th, .data-table td { padding: 15px; text-align: left; border-bottom: 1px solid var(--border-color); vertical-align: middle; white-space: nowrap; }
+        .data-table th { background-color: var(--bg-light-gray); font-weight: 600; color: var(--text-dark); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; }
+        .data-table td { color: var(--text-dark); font-size: 0.9rem; }
+        .data-table tbody tr:hover { background-color: #f1f5f9; }
+        .photo-col { width: 60px; text-align: center; padding-left: 10px; padding-right: 10px; }
+        .actions-col { width: 130px; text-align: center; }
+
+        .table-photo-placeholder { width: 45px; height: 45px; background-color: #e9ecef; border-radius: 50%; display: flex; align-items: center; justify-content: center; overflow: hidden; border: 1px solid #ced4da; margin: 0 auto; }
+        .table-photo-placeholder img { width: 100%; height: 100%; object-fit: cover; }
+        .table-photo-placeholder i.default-icon { color: #adb5bd; font-size: 1.5rem; }
+
+        .data-table td .action-btn { background: none; border: none; padding: 6px 8px; cursor: pointer; font-size: 1rem; color: var(--text-light); transition: color 0.2s ease, transform 0.2s ease; margin: 0 4px; }
+        .data-table td .action-btn:hover { transform: scale(1.1); }
+        .data-table td .action-btn.edit:hover { color: var(--primary-blue); }
+        .data-table td .action-btn.delete:hover { color: #dc3545; }
+
+        /* --- ESTILOS DO MODAL (Copiado de pacientes.html) --- */
+        .modal { display: none; position: fixed; z-index: 1050; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0, 0, 0, 0.55); justify-content: center; align-items: center; padding: 20px; }
+        .modal-content { background-color: var(--white); margin: auto; padding: 0; border-radius: 12px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); position: relative; width: 90%; max-width: 650px; animation: fadeInModal 0.3s ease-out; border: 1px solid var(--border-color); }
+        .modal-content.small-modal { max-width: 450px; }
+        @keyframes fadeInModal { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding: 20px 30px; }
+        .modal-header h3 { margin-bottom: 0; font-size: 1.4rem; font-weight: 600; color: var(--dark-blue); }
+        .close-btn { color: #888; font-size: 1.5rem; font-weight: bold; background: none; border: none; cursor: pointer; padding: 0; line-height: 1; opacity: 0.7; transition: opacity 0.2s ease; }
+        .close-btn:hover, .close-btn:focus { color: var(--text-dark); opacity: 1; text-decoration: none; }
+        .modal-body { padding: 30px; max-height: 65vh; overflow-y: auto; }
+        .modal-body .form-group { margin-bottom: 1.2rem; }
+        .modal-body .form-group label { font-size: 0.85rem; font-weight: 500; color: var(--text-dark); margin-bottom: 6px; display: block; }
+        .modal-body .form-group input, .modal-body .form-group select { padding: 14px; border-radius: 8px; width: 100%; border: 1px solid var(--border-color); font-family: 'Montserrat', sans-serif; font-size: 0.95rem; }
+        .modal-body .form-group input:focus, .modal-body .form-group select:focus { outline: none; border-color: var(--primary-blue); box-shadow: 0 0 0 3px rgba(26, 115, 232, 0.2); }
+        .modal-body .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; }
+        .modal-footer { display: flex; justify-content: flex-end; gap: 12px; padding: 20px 30px; border-top: 1px solid var(--border-color); background-color: var(--bg-light-gray); border-radius: 0 0 12px 12px; }
+        .modal-footer .btn-primary { background: var(--gradient-primary); border: none; color: var(--white); padding: 10px 25px; }
+        .modal-footer .btn-primary:hover { box-shadow: var(--shadow-hover); }
+        .modal-footer .btn-secondary { background-color: var(--white); color: var(--text-light); border: 1px solid var(--border-color); padding: 10px 25px; box-shadow: none; }
+        .modal-footer .btn-secondary:hover { background-color: var(--bg-light-gray); border-color: #adb5bd; color: var(--text-dark); box-shadow: none; transform: none; }
+        .modal-footer .btn-danger { background-color: #dc3545; color: var(--white); border: none; padding: 10px 25px; }
+        .modal-footer .btn-danger:hover { background-color: #c82333; box-shadow: 0 4px 10px rgba(220, 53, 69, 0.3); }
+        .modal-open { display: flex; }
+
+        @media (max-width: 768px) {
+            .card-header { flex-direction: column; align-items: flex-start; gap: 1rem; }
+            .filters { flex-direction: column; gap: 1rem; }
+            .data-table th:nth-child(3), .data-table td:nth-child(3) { display: none; } /* Esconde email */
+            .modal-body .form-row { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-layout">
+
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <img src="assets/clinica-logo.jpg" alt="Logo Clínica Médica" class="logo-img">
+            </div>
+            <nav class="sidebar-nav">
+                <ul id="sidebarMenu"></ul>
+            </nav>
+            <div class="sidebar-footer">
+                 <button id="logoutButton" class="btn btn-logout">
+                    <i class="fas fa-sign-out-alt"></i> Sair
+                 </button>
+            </div>
+        </aside>
+
+        <div class="main-panel">
+
+            <header class="main-header">
+                <div class="header-content">
+                    <h1 id="pageTitle">Funcionários</h1>
+                    <div class="user-info">
+                        <span id="userName">Carregando...</span>
+                    </div>
+                </div>
+            </header>
+
+            <main class="content-area" id="mainContent">
+
+                <div class="card">
+
+                    <div class="card-header">
+                        <h2>Gerenciar Funcionários</h2>
+                        <button id="btnNovoFuncionario" class="btn btn-primary"><i class="fas fa-user-plus"></i> Novo Funcionário</button>
+                    </div>
+
+                    <div class="filters">
+                        <div class="form-group">
+                            <label for="filterName">Filtrar por Nome:</label>
+                            <input type="text" id="filterName" placeholder="Digite o nome...">
+                        </div>
+                        <div class="form-group">
+                            <label for="filterRole">Filtrar por Cargo:</label>
+                            <select id="filterRole">
+                                <option value="">Todos</option>
+                                <option value="admin">Admin</option>
+                                <option value="medico">Médico</option>
+                                <option value="atendente">Atendente</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-secondary btn-filter"><i class="fas fa-search"></i> Filtrar</button>
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th class="photo-col">Foto</th>
+                                    <th>Nome Completo</th>
+                                    <th>Email (Login)</th>
+                                    <th>Cargo</th>
+                                    <th class="actions-col">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="photo-col"><div class="table-photo-placeholder"><img src="assets/avatar-admin.jpg" alt="Foto Admin"></div></td>
+                                    <td>Administrador</td>
+                                    <td>admin@clinica.com</td>
+                                    <td>Admin</td>
+                                    <td class="actions-col">
+                                        <button class="action-btn edit" title="Editar" data-id="1" data-nome="Administrador"><i class="fas fa-edit"></i></button>
+                                        <button class="action-btn delete" title="Excluir" data-id="1" data-nome="Administrador"><i class="fas fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="photo-col"><div class="table-photo-placeholder"><img src="assets/avatar-medico.jpg" alt="Foto Dr. João"></div></td>
+                                    <td>Dr. João Silva</td>
+                                    <td>medico@clinica.com</td>
+                                    <td>Médico</td>
+                                    <td class="actions-col">
+                                        <button class="action-btn edit" title="Editar" data-id="2" data-nome="Dr. João Silva"><i class="fas fa-edit"></i></button>
+                                        <button class="action-btn delete" title="Excluir" data-id="2" data-nome="Dr. João Silva"><i class="fas fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="photo-col"><div class="table-photo-placeholder"><img src="assets/avatar-atendente.jpg" alt="Foto Maria"></i></div></td>
+                                    <td>Maria Oliveira</td>
+                                    <td>atendente@clinica.com</td>
+                                    <td>Atendente</td>
+                                    <td class="actions-col">
+                                        <button class="action-btn edit" title="Editar" data-id="3" data-nome="Maria Oliveira"><i class="fas fa-edit"></i></button>
+                                        <button class="action-btn delete" title="Excluir" data-id="3" data-nome="Maria Oliveira"><i class="fas fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                                 <tr>
+                                    <td class="photo-col"><div class="table-photo-placeholder"><i class="fas fa-user default-icon"></i></div></td>
+                                    <td>Dra. Maria Souza</td>
+                                    <td>maria.souza@clinica.com</td>
+                                    <td>Médico</td>
+                                    <td class="actions-col">
+                                        <button class="action-btn edit" title="Editar" data-id="4" data-nome="Dra. Maria Souza"><i class="fas fa-edit"></i></button>
+                                        <button class="action-btn delete" title="Excluir" data-id="4" data-nome="Dra. Maria Souza"><i class="fas fa-trash"></i></button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <div id="funcionarioFormModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="funcionarioFormTitle">Novo Funcionário</h3>
+                <button type="button" class="close-btn" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="funcionarioForm">
+                    <input type="hidden" id="funcionarioId" name="funcionarioId">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="funcName">Nome Completo</label>
+                            <input type="text" id="funcName" name="funcName" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="funcRole">Cargo / Perfil</label>
+                            <select id="funcRole" name="funcRole" required>
+                                <option value="">Selecione...</option>
+                                <option value="admin">Admin</option>
+                                <option value="medico">Médico</option>
+                                <option value="atendente">Atendente</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="funcEmail">Email (Será usado para login)</label>
+                        <input type="email" id="funcEmail" name="funcEmail" required placeholder="email@clinica.com">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="funcPassword">Senha (Mín. 6 caracteres)</label>
+                            <input type="password" id="funcPassword" name="funcPassword" placeholder="Deixe em branco para não alterar">
+                        </div>
+                        <div class="form-group">
+                            <label for="funcPhone">Telefone (Opcional)</label>
+                            <input type="tel" id="funcPhone" name="funcPhone" placeholder="(XX) XXXXX-XXXX">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="submit" form="funcionarioForm" class="btn btn-primary">Salvar Funcionário</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="deleteConfirmModal" class="modal">
+        <div class="modal-content small-modal">
+            <div class="modal-header">
+                <h3>Confirmar Exclusão</h3>
+                <button type="button" class="close-btn" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <p style="text-align: center; font-size: 1.1rem;"><i class="fas fa-exclamation-triangle" style="color: #dc3545; margin-right: 10px;"></i>Tem certeza?</p>
+                <p>Você realmente deseja excluir o funcionário <strong id="deleteFuncName" style="color: var(--text-dark);"></strong>?</p>
+                <p style="font-size: 0.9rem; color: var(--text-light);">Esta ação não pode ser desfeita.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancelar</button>
+                <button type="button" id="confirmDeleteBtn" class="btn btn-danger">Excluir</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+    <script src="js/dashboard.js"></script>
+
+    <script>
+        $(document).ready(function() {
+            
+            // --- LÓGICA DOS MODAIS (Baseada em pacientes.html) ---
+            const funcionarioFormModal = $('#funcionarioFormModal');
+            const deleteConfirmModal = $('#deleteConfirmModal');
+
+            // Abrir Novo
+            $('#btnNovoFuncionario').on('click', function() {
+                $('#funcionarioFormTitle').text('Novo Funcionário');
+                $('#funcionarioForm')[0].reset();
+                $('#funcionarioId').val('');
+                $('#funcPassword').attr('placeholder', 'Mín. 6 caracteres (Obrigatório)');
+                funcionarioFormModal.addClass('modal-open');
+            });
+
+            // Abrir Editar
+            $('.data-table').on('click', '.action-btn.edit', function() {
+                const funcId = $(this).data('id');
+                const funcName = $(this).data('nome');
+                
+                $('#funcionarioFormTitle').text('Editar Funcionário');
+                $('#funcionarioId').val(funcId);
+                $('#funcPassword').attr('placeholder', 'Deixe em branco para não alterar');
+
+                // Preenchimento fictício...
+                $('#funcName').val(funcName);
+                
+                if(funcId == 1) { // Admin
+                    $('#funcEmail').val('admin@clinica.com');
+                    $('#funcRole').val('admin');
+                    $('#funcPhone').val('(34) 99999-1111');
+                } else if (funcId == 2) { // Medico
+                    $('#funcEmail').val('medico@clinica.com');
+                    $('#funcRole').val('medico');
+                    $('#funcPhone').val('(34) 98888-2222');
+                } else { // Atendente
+                    $('#funcEmail').val('atendente@clinica.com');
+                    $('#funcRole').val('atendente');
+                    $('#funcPhone').val('(34) 97777-3333');
+                }
+                
+                funcionarioFormModal.addClass('modal-open');
+            });
+
+            $('.data-table').on('click', '.action-btn.delete', function() {
+                const funcId = $(this).data('id');
+                const funcName = $(this).data('nome');
+                
+                // Não deixar excluir o admin@clinica.com (ID 1)
+                if (funcId == 1) {
+                    alert('Não é possível excluir o usuário Administrador principal.');
+                    return;
+                }
+                
+                $('#deleteFuncName').text(funcName);
+                $('#confirmDeleteBtn').data('id', funcId);
+                deleteConfirmModal.addClass('modal-open');
+            });
+
+            $('.close-btn, [data-dismiss="modal"]').on('click', function() {
+                $(this).closest('.modal').removeClass('modal-open');
+            });
+            $('.modal').on('click', function(event) {
+                if ($(event.target).hasClass('modal')) $(this).removeClass('modal-open');
+            });
+
+            $('#funcionarioForm').on('submit', function(event) {
+                event.preventDefault();
+                const funcId = $('#funcionarioId').val();
+                if (funcId) { alert('Funcionário (ID: ' + funcId + ') "atualizado"! (Simulação)'); }
+                else { alert('Novo funcionário "salvo"! (Simulação)'); }
+                funcionarioFormModal.removeClass('modal-open');
+            });
+            
+            $('#confirmDeleteBtn').on('click', function() {
+                 const funcId = $(this).data('id');
+                 alert('Funcionário (ID: ' + funcId + ') "excluído"! (Simulação)');
+                 deleteConfirmModal.removeClass('modal-open');
+            });
+
+        });
+    </script>
+
+</body>
+</html>
