@@ -72,6 +72,11 @@
          .modal-footer .btn-danger:hover { background-color: #c82333; box-shadow: 0 4px 10px rgba(220, 53, 69, 0.3); }
          .modal-open { display: flex; }
          
+         /* CSS Específico Modal Detalhes Consulta */
+         #consultaDetailsModal .details-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem 1.5rem; }
+         #consultaDetailsModal .details-grid p { margin-bottom: 0; font-size: 0.95rem; color: var(--text-dark); line-height: 1.5; }
+         #consultaDetailsModal .details-grid p strong { color: var(--text-light); display: block; font-size: 0.8rem; font-weight: 500; margin-bottom: 3px; text-transform: uppercase; letter-spacing: 0.5px; }
+
          /* Classe para esconder botões (definida em dashboard.js, usada em pacientes.html) */
          .hide-for-medico { display: none !important; }
 
@@ -101,7 +106,7 @@
                 <div class="header-content">
                     <h1 id="pageTitle">Consultas</h1>
                     <div class="user-info">
-                        <span id="userName">Carregando...</span>
+                        <img src="" alt="Avatar" id="userAvatar" class="user-avatar" style="display: none;"> <span id="userName">Carregando...</span>
                     </div>
                 </div>
             </header>
@@ -159,6 +164,7 @@
                                     <td class="actions-col">
                                         <button class="action-btn edit" title="Editar" data-id="1"><i class="fas fa-edit"></i></button>
                                         <button class="action-btn cancel" title="Cancelar" data-id="1" data-paciente="Ana Pereira da Silva"><i class="fas fa-calendar-times"></i></button>
+                                        <button class="action-btn details" title="Ver Detalhes" data-id="1"><i class="fas fa-eye"></i></button>
                                     </td>
                                 </tr>
                                 <tr>
@@ -171,6 +177,7 @@
                                     <td class="actions-col">
                                         <button class="action-btn edit" title="Editar" data-id="2"><i class="fas fa-edit"></i></button>
                                         <button class="action-btn cancel" title="Cancelar" data-id="2" data-paciente="José Carlos Mendes"><i class="fas fa-calendar-times"></i></button>
+                                        <button class="action-btn details" title="Ver Detalhes" data-id="2"><i class="fas fa-eye"></i></button>
                                     </td>
                                 </tr>
                                 <tr>
@@ -183,6 +190,7 @@
                                     <td class="actions-col">
                                         <button class="action-btn edit" title="Editar" data-id="3"><i class="fas fa-edit"></i></button>
                                         <button class="action-btn cancel" title="Cancelar" data-id="3" data-paciente="Mariana Costa Oliveira"><i class="fas fa-calendar-times"></i></button>
+                                        <button class="action-btn details" title="Ver Detalhes" data-id="3"><i class="fas fa-eye"></i></button>
                                     </td>
                                 </tr>
                                  <tr>
@@ -193,11 +201,13 @@
                                     <td>15:00</td>
                                     <td><span class="status-badge cancelada">Cancelada</span></td>
                                     <td class="actions-col">
+                                        <button class="action-btn edit" title="Editar" data-id="4"><i class="fas fa-edit"></i></button>
+                                        <button class="action-btn cancel" title="Cancelar" data-id="4" data-paciente="Ricardo Alves"><i class="fas fa-calendar-times"></i></button>
                                         <button class="action-btn details" title="Ver Detalhes" data-id="4"><i class="fas fa-eye"></i></button>
                                     </td>
                                 </tr>
                             </tbody>
-                        </table>
+                            </table>
                     </div>
 
                 </div>
@@ -282,12 +292,33 @@
         </div>
     </div>
 
-
+    <div id="consultaDetailsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Detalhes da Consulta</h3>
+                <button type="button" class="close-btn" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="details-grid">
+                    <p><strong>Paciente:</strong> <span id="detailConsultaPaciente"></span></p>
+                    <p><strong>Médico:</strong> <span id="detailConsultaMedico"></span></p>
+                    <p><strong>Especialidade:</strong> <span id="detailConsultaEspec"></span></p>
+                    <p><strong>Data:</strong> <span id="detailConsultaData"></span></p>
+                    <p><strong>Hora:</strong> <span id="detailConsultaHora"></span></p>
+                    <p><strong>Status:</strong> <span id="detailConsultaStatus"></span></p>
+                </div>
+                <h4 style="margin-top: 1.5rem; border-top: 1px solid var(--border-color); padding-top: 1.5rem;">Observações</h4>
+                <p id="detailConsultaObs" style="padding: 10px; background: #f9f9f9; border-radius: 5px; border: 1px solid #eee;">Nenhuma observação registrada.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="js/dashboard.js"></script>
 
     <script>
-        // CORREÇÃO: $(document).ready ao invés de $(document.ready
         $(document).ready(function() {
             
             // --- VERIFICA PERFIL (dashboard.js deve rodar primeiro) ---
@@ -300,11 +331,12 @@
                 $('.data-table .action-btn.cancel').addClass('hide-for-medico'); // Esconde "Cancelar"
                 $('.card-header h2').text('Visualizar Consultas'); // Muda título
             }
-
+    
             // --- LÓGICA DOS MODAIS (Baseada em pacientes.html) ---
             const consultaFormModal = $('#consultaFormModal');
             const cancelConfirmModal = $('#cancelConfirmModal');
-
+            const consultaDetailsModal = $('#consultaDetailsModal'); // <<< MODAL DE DETALHES
+    
             // Abrir Novo
             $('#btnNovaConsulta').on('click', function() {
                 if (!$(this).hasClass('hide-for-medico')) {
@@ -314,7 +346,7 @@
                     consultaFormModal.addClass('modal-open');
                 }
             });
-
+    
             // Abrir Editar
             $('.data-table').on('click', '.action-btn.edit:not(.hide-for-medico)', function() {
                 const consultaId = $(this).data('id');
@@ -344,7 +376,8 @@
                 
                 consultaFormModal.addClass('modal-open');
             });
-
+    
+            // Abrir Cancelar
             $('.data-table').on('click', '.action-btn.cancel:not(.hide-for-medico)', function() {
                 const consultaId = $(this).data('id');
                 const pacienteName = $(this).data('paciente');
@@ -353,14 +386,50 @@
                 $('#confirmCancelBtn').data('id', consultaId);
                 cancelConfirmModal.addClass('modal-open');
             });
-
+    
+            // --- INÍCIO: LÓGICA NOVA PARA MODAL DE DETALHES ---
+            $('.data-table').on('click', '.action-btn.details', function() {
+                const $row = $(this).closest('tr');
+                
+                // Pega os dados da linha da tabela
+                const paciente = $row.find('td:eq(0)').text();
+                const medico = $row.find('td:eq(1)').text();
+                const espec = $row.find('td:eq(2)').text();
+                const data = $row.find('td:eq(3)').text();
+                const hora = $row.find('td:eq(4)').text();
+                const status = $row.find('td:eq(5)').html(); // Pega o HTML do badge
+                
+                // Preenche o modal
+                $('#detailConsultaPaciente').text(paciente);
+                $('#detailConsultaMedico').text(medico);
+                $('#detailConsultaEspec').text(espec);
+                $('#detailConsultaData').text(data);
+                $('#detailConsultaHora').text(hora);
+                $('#detailConsultaStatus').html(status); // Usa .html() para manter o badge
+                
+                // Lógica fictícia para observações
+                if (status.includes('Cancelada')) {
+                    $('#detailConsultaObs').text('Consulta cancelada pelo paciente com 2h de antecedência.');
+                } else {
+                     $('#detailConsultaObs').text('Nenhuma observação registrada.');
+                }
+    
+                consultaDetailsModal.addClass('modal-open');
+            });
+            // --- FIM: LÓGICA NOVA PARA MODAL DE DETALHES ---
+    
+    
+            // Fechar TODOS os modais
             $('.close-btn, [data-dismiss="modal"]').on('click', function() {
                 $(this).closest('.modal').removeClass('modal-open');
             });
             $('.modal').on('click', function(event) {
-                if ($(event.target).hasClass('modal')) $(this).removeClass('modal-open');
+                if ($(event.target).hasClass('modal')) {
+                    $(this).removeClass('modal-open');
+                }
             });
-
+    
+            // Submits Fictícios
             $('#consultaForm').on('submit', function(event) {
                 event.preventDefault();
                 const consultaId = $('#consultaId').val();
@@ -374,9 +443,8 @@
                  alert('Consulta (ID: ' + consultaId + ') "cancelada"! (Simulação)');
                  cancelConfirmModal.removeClass('modal-open');
             });
-
+    
         });
     </script>
-
-</body>
+    </body>
 </html>

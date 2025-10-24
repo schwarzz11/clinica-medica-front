@@ -128,6 +128,25 @@
             font-size: 0.85rem;
             padding: 8px 16px;
         }
+        
+        /* --- ESTILOS DO MODAL (Copiado de pacientes.html) --- */
+        .modal { display: none; position: fixed; z-index: 1050; left: 0; top: 0; width: 100%; height: 100%; overflow: auto; background-color: rgba(0, 0, 0, 0.55); justify-content: center; align-items: center; padding: 20px; }
+        .modal-content { background-color: var(--white); margin: auto; padding: 0; border-radius: 12px; box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15); position: relative; width: 90%; max-width: 650px; animation: fadeInModal 0.3s ease-out; border: 1px solid var(--border-color); }
+        @keyframes fadeInModal { from { opacity: 0; transform: translateY(-30px); } to { opacity: 1; transform: translateY(0); } }
+        .modal-header { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--border-color); padding: 20px 30px; }
+        .modal-header h3 { margin-bottom: 0; font-size: 1.4rem; font-weight: 600; color: var(--dark-blue); }
+        .close-btn { color: #888; font-size: 1.5rem; font-weight: bold; background: none; border: none; cursor: pointer; padding: 0; line-height: 1; opacity: 0.7; transition: opacity 0.2s ease; }
+        .close-btn:hover, .close-btn:focus { color: var(--text-dark); opacity: 1; text-decoration: none; }
+        .modal-body { padding: 30px; max-height: 65vh; overflow-y: auto; }
+        .modal-footer { display: flex; justify-content: flex-end; gap: 12px; padding: 20px 30px; border-top: 1px solid var(--border-color); background-color: var(--bg-light-gray); border-radius: 0 0 12px 12px; }
+        .modal-footer .btn-secondary { background-color: var(--white); color: var(--text-light); border: 1px solid var(--border-color); padding: 10px 25px; box-shadow: none; }
+        .modal-footer .btn-secondary:hover { background-color: var(--bg-light-gray); border-color: #adb5bd; color: var(--text-dark); box-shadow: none; transform: none; }
+        .modal-open { display: flex; }
+         /* CSS Específico Modal Prontuário */
+         #prontuarioDetailsModal .details-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem 1.5rem; }
+         #prontuarioDetailsModal .details-grid p { margin-bottom: 0; font-size: 0.95rem; color: var(--text-dark); line-height: 1.5; }
+         #prontuarioDetailsModal .details-grid p strong { color: var(--text-light); display: block; font-size: 0.8rem; font-weight: 500; margin-bottom: 3px; text-transform: uppercase; letter-spacing: 0.5px; }
+
 
         /* Responsividade */
         @media (max-width: 768px) {
@@ -180,7 +199,7 @@
                 <div class="header-content">
                     <h1 id="pageTitle">Prontuários</h1>
                     <div class="user-info">
-                        <span id="userName">Carregando...</span>
+                        <img src="" alt="Avatar" id="userAvatar" class="user-avatar" style="display: none;"> <span id="userName">Carregando...</span>
                     </div>
                 </div>
             </header>
@@ -247,8 +266,105 @@
         </div>
     </div>
 
+    <div id="prontuarioDetailsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Detalhes do Prontuário</h3>
+                <button type="button" class="close-btn" data-dismiss="modal">&times;</button>
+            </div>
+            <div class="modal-body">
+                
+                <h4>Informações do Paciente</h4>
+                <div class="details-grid">
+                    <p><strong>Nome Completo:</strong> <span id="detailProntuarioName"></span></p>
+                    <p><strong>CPF:</strong> <span id="detailProntuarioCPF"></span></p>
+                    <p><strong>Data de Nascimento:</strong> <span id="detailProntuarioDOB"></span></p>
+                </div>
+    
+                <h4 style="margin-top: 1.5rem; border-top: 1px solid var(--border-color); padding-top: 1.5rem;">Último Registro (Fictício)</h4>
+                <p><strong>Data:</strong> <span id="detailProntuarioData"></span></p>
+                <p><strong>Médico:</strong> <span id="id_prontuarioMedico"></span></p> <p style="margin-top: 1rem;"><strong>Anotações:</strong></p>
+                <p id="detailProntuarioNotas" style="padding: 10px; background: #f9f9f9; border-radius: 5px; border: 1px solid #eee;"></p>
+    
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Fechar</button>
+            </div>
+        </div>
+    </div>
     <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
     <script src="js/dashboard.js"></script>
 
+    <script>
+    $(document).ready(function() {
+        
+        // Dados fictícios para o modal de prontuário
+        const prontuariosFicticios = {
+            "Ana Pereira da Silva": {
+                cpf: "222.333.444-55",
+                dob: "10/05/1975",
+                data: "25/10/2025",
+                medico: "Dr. João Silva",
+                notas: "Paciente apresenta leve arritmia. Solicitado Holter 24h."
+            },
+            "José Carlos Mendes": {
+                cpf: "555.666.777-88",
+                dob: "20/02/1980",
+                data: "25/10/2025",
+                medico: "Dra. Maria Souza",
+                notas: "Paciente relata dor no joelho direito após esforço. Suspeita de lesão no menisco. Solicitada Ressonância Magnética."
+            },
+            "Mariana Costa Oliveira": {
+                cpf: "111.000.999-33",
+                dob: "15/11/2001",
+                data: "26/10/2025",
+                medico: "Dr. João Silva",
+                notas: "Paciente veio para consulta de rotina. Pressão arterial 12/8. Exames de sangue normais."
+            }
+        };
+    
+        const prontuarioModal = $('#prontuarioDetailsModal');
+    
+        // Abrir Modal "Abrir Prontuário"
+        $('.prontuario-list').on('click', '.btn-quick-action', function(e) {
+            e.preventDefault(); // Impede o link '#' de pular a tela
+    
+            // Pega o nome do paciente do H4 mais próximo
+            const pacienteName = $(this).closest('.prontuario-item').find('h4').text();
+            
+            // Busca os dados fictícios
+            const dados = prontuariosFicticios[pacienteName];
+    
+            if (dados) {
+                // Preenche o modal
+                $('#detailProntuarioName').text(pacienteName);
+                $('#detailProntuarioCPF').text(dados.cpf);
+                $('#detailProntuarioDOB').text(dados.dob);
+                $('#detailProntuarioData').text(dados.data);
+                $('#id_prontuarioMedico').text(dados.medico); // Corrigido o ID aqui
+                $('#detailProntuarioNotas').text(dados.notas);
+                
+                // Abre o modal
+                prontuarioModal.addClass('modal-open');
+            } else {
+                alert('Erro: Dados fictícios não encontrados para ' + pacienteName);
+            }
+        });
+    
+        // Lógica para Fechar o modal
+        // (Pega cliques no 'x' ou no botão 'Fechar' que tenham o atributo 'data-dismiss')
+        $('#prontuarioDetailsModal').on('click', '.close-btn, [data-dismiss="modal"]', function() {
+            prontuarioModal.removeClass('modal-open');
+        });
+    
+        // Fecha o modal se clicar fora do conteúdo
+        $('#prontuarioDetailsModal').on('click', function(event) {
+            if ($(event.target).hasClass('modal')) {
+                prontuarioModal.removeClass('modal-open');
+            }
+        });
+    
+    });
+    </script>
     </body>
 </html>
